@@ -106,7 +106,7 @@ export default function CoursesManager() {
             onClick={handleManualSave}
             disabled={isSyncing}
             className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-orange-500/20 transition-all cursor-pointer disabled:opacity-50"
-            title="Lưu danh sách khóa học lên Vercel Blob & KV"
+            title="Lưu danh sách khóa học lên Vercel Storage (BLOB_STORE_ID)"
           >
             {isSyncing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             <span>{isSyncing ? 'Đang Lưu...' : 'Lưu Khóa Học'}</span>

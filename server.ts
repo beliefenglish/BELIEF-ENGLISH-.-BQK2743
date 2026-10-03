@@ -124,13 +124,39 @@ Formatting & Tone:
     }
   });
 
-  // GET /api/content
+  // GET /api/content - Fetch site content from Vercel Storage (BLOB_STORE_ID) or local disk
   app.get('/api/content', async (_req, res) => {
     try {
       res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate');
 
       if (cachedContent) {
         return res.json(cachedContent);
+      }
+
+      // Check Vercel Storage via @vercel/blob using BLOB_STORE_ID
+      const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+      const token = process.env.BLOB_READ_WRITE_TOKEN;
+      if (token && token !== 'vercel_blob_rw_token_here') {
+        try {
+          const { list } = await import('@vercel/blob');
+          const listOptions: any = { prefix: 'articles/site-content.json', limit: 1 };
+          if (storeId) listOptions.storeId = storeId;
+          listOptions.token = token;
+          const blobList = await list(listOptions);
+          if (blobList.blobs && blobList.blobs.length > 0) {
+            const blobUrl = blobList.blobs[0].url;
+            const blobRes = await fetch(blobUrl);
+            if (blobRes.ok) {
+              const blobData = await blobRes.json();
+              if (blobData) {
+                cachedContent = blobData;
+                return res.json(blobData);
+              }
+            }
+          }
+        } catch (blobFetchErr) {
+          console.warn('Vercel Storage read note:', blobFetchErr);
+        }
       }
 
       if (fs.existsSync(DATA_FILE)) {
@@ -143,24 +169,6 @@ Formatting & Tone:
         }
       }
 
-      // Check Vercel KV if available
-      if (
-        process.env.KV_REST_API_URL &&
-        process.env.KV_REST_API_TOKEN &&
-        !process.env.KV_REST_API_URL.includes('example-kv')
-      ) {
-        try {
-          const { kv } = await import('@vercel/kv');
-          const kvData = await kv.get('belief_english_site_content');
-          if (kvData) {
-            cachedContent = kvData;
-            return res.json(kvData);
-          }
-        } catch (kvErr) {
-          console.warn('Vercel KV fetch fallback:', kvErr);
-        }
-      }
-
       return res.json(defaultContent);
     } catch (err: any) {
       console.error('Error in GET /api/content:', err);
@@ -168,7 +176,7 @@ Formatting & Tone:
     }
   });
 
-  // POST /api/content
+  // POST /api/content - Save site content to Vercel Storage (BLOB_STORE_ID)
   app.post('/api/content', async (req, res) => {
     try {
       const payload = {
@@ -184,11 +192,10 @@ Formatting & Tone:
         console.error('Error writing DATA_FILE:', fileErr);
       }
 
-      // 2. Vercel Blob Storage Integration
+      // 2. Vercel Storage (Blob) Integration using BLOB_STORE_ID
       let blobResult: any = null;
       let blobError: string | null = null;
-      const storeId =
-        process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+      const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
       const token = process.env.BLOB_READ_WRITE_TOKEN;
 
       try {
@@ -196,7 +203,7 @@ Formatting & Tone:
         const putOptions: any = {
           access: 'public',
           addRandomSuffix: false,
-          ...(storeId ? { storeId } : {}),
+          storeId,
         };
         if (token && token !== 'vercel_blob_rw_token_here') {
           putOptions.token = token;
@@ -204,25 +211,8 @@ Formatting & Tone:
 
         blobResult = await put('articles/site-content.json', JSON.stringify(payload, null, 2), putOptions);
       } catch (bErr: any) {
-        blobError = bErr.message || 'Chưa có token hoặc chưa kết nối được Vercel Blob';
-        console.warn('Vercel Blob sync note:', bErr.message);
-      }
-
-      // 3. Vercel KV Integration
-      let kvSuccess = false;
-      let kvError: string | null = null;
-      if (
-        process.env.KV_REST_API_URL &&
-        process.env.KV_REST_API_TOKEN &&
-        !process.env.KV_REST_API_URL.includes('example-kv')
-      ) {
-        try {
-          const { kv } = await import('@vercel/kv');
-          await kv.set('belief_english_site_content', payload);
-          kvSuccess = true;
-        } catch (kErr: any) {
-          kvError = kErr.message;
-        }
+        blobError = bErr.message || 'Chưa cấu hình token hoặc chưa kết nối được Vercel Storage';
+        console.warn('Vercel Storage sync note:', bErr.message);
       }
 
       res.json({
@@ -234,13 +224,11 @@ Formatting & Tone:
           storeId,
           blobSaved: !!blobResult?.url,
           blobError: blobResult?.url ? null : blobError,
-          kvSaved: kvSuccess,
-          kvError,
           localFile: DATA_FILE,
         },
         message: blobResult?.url
-          ? 'Đã lưu và đồng bộ thành công vào Vercel Blob Storage & Máy chủ!'
-          : 'Đã lưu an toàn toàn bộ dữ liệu vào máy chủ hệ thống (Local Storage)!',
+          ? 'Đã lưu và đồng bộ thành công vào Vercel Storage (BLOB_STORE_ID)!'
+          : 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
       });
     } catch (err: any) {
       console.error('Error saving in /api/content:', err);
@@ -295,57 +283,42 @@ Formatting & Tone:
     }
   });
 
-  // GET /api/storage-status - Check status of Vercel Blob, KV, and Local Storage
+  // GET /api/storage-status - Check status of Vercel Storage (BLOB_STORE_ID) and Local Disk
   app.get('/api/storage-status', async (_req, res) => {
-    const storeId =
-      process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
     const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
     const hasBlobToken = !!(blobToken && blobToken !== 'vercel_blob_rw_token_here');
-    const hasKv = !!(
-      process.env.KV_REST_API_URL &&
-      process.env.KV_REST_API_TOKEN &&
-      !process.env.KV_REST_API_URL.includes('example-kv')
-    );
     const localFileExists = fs.existsSync(DATA_FILE);
 
     res.json({
       storeId,
       hasBlobToken,
-      hasKv,
       localFileExists,
       lastSaved: localFileExists ? fs.statSync(DATA_FILE).mtime.toISOString() : null,
     });
   });
 
-  // POST /api/storage-config - Update storage credentials dynamically
+  // POST /api/storage-config - Update Vercel Storage (BLOB_STORE_ID) credentials dynamically
   app.post('/api/storage-config', async (req, res) => {
     try {
-      const { blobStoreId, blobToken, kvUrl, kvToken } = req.body;
+      const { blobStoreId, blobToken } = req.body;
 
       if (blobStoreId) {
-        process.env.BLOB_STORE_ID = blobStoreId;
-        process.env.beliefenglish_STORE_ID = blobStoreId;
+        process.env.BLOB_STORE_ID = blobStoreId.trim();
       }
       if (blobToken !== undefined) {
-        process.env.BLOB_READ_WRITE_TOKEN = blobToken;
+        process.env.BLOB_READ_WRITE_TOKEN = blobToken.trim();
       }
-      if (kvUrl !== undefined) process.env.KV_REST_API_URL = kvUrl;
-      if (kvToken !== undefined) process.env.KV_REST_API_TOKEN = kvToken;
 
-      const envContent = `# Vercel Blob Storage configuration
+      const envContent = `# Vercel Storage configuration (Exclusively BLOB_STORE_ID)
 BLOB_STORE_ID="${process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9'}"
-beliefenglish_STORE_ID="${process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9'}"
 BLOB_READ_WRITE_TOKEN="${process.env.BLOB_READ_WRITE_TOKEN || ''}"
-
-# Vercel KV Database configuration
-KV_REST_API_URL="${process.env.KV_REST_API_URL || ''}"
-KV_REST_API_TOKEN="${process.env.KV_REST_API_TOKEN || ''}"
 `;
       await fsPromises.writeFile(path.resolve(process.cwd(), '.env.local'), envContent, 'utf-8');
 
       res.json({
         success: true,
-        message: 'Đã lưu cấu hình Vercel Storage vào .env.local thành công!',
+        message: 'Đã lưu cấu hình Vercel Storage (BLOB_STORE_ID) vào .env.local thành công!',
         storeId: process.env.BLOB_STORE_ID,
         hasBlobToken: !!(process.env.BLOB_READ_WRITE_TOKEN && process.env.BLOB_READ_WRITE_TOKEN !== 'vercel_blob_rw_token_here'),
       });
@@ -355,7 +328,7 @@ KV_REST_API_TOKEN="${process.env.KV_REST_API_TOKEN || ''}"
     }
   });
 
-  // POST /api/upload - Upload file to Vercel Blob or fallback to local disk
+  // POST /api/upload - Upload file to Vercel Storage (BLOB_STORE_ID) or fallback to local disk
   app.post('/api/upload', express.raw({ type: '*/*', limit: '25mb' }), async (req, res) => {
     try {
       const rawName = (req.query.filename as string) || `upload-${Date.now()}`;
@@ -364,11 +337,10 @@ KV_REST_API_TOKEN="${process.env.KV_REST_API_TOKEN || ''}"
       const filename = `${Date.now()}_${cleanBase}${ext}`;
 
       let blobResult: any = null;
-      const storeId =
-        process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+      const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
       const token = process.env.BLOB_READ_WRITE_TOKEN;
 
-      // 1. Try Vercel Blob if token is configured
+      // 1. Try Vercel Storage if token is configured
       if (token && token !== 'vercel_blob_rw_token_here') {
         try {
           const { put } = await import('@vercel/blob');
@@ -378,7 +350,7 @@ KV_REST_API_TOKEN="${process.env.KV_REST_API_TOKEN || ''}"
             storeId,
           });
         } catch (blobErr: any) {
-          console.warn('Vercel Blob upload note:', blobErr.message);
+          console.warn('Vercel Storage upload note:', blobErr.message);
         }
       }
 

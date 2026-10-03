@@ -1,31 +1,42 @@
-import { kv } from '@vercel/kv';
-import { put } from '@vercel/blob';
+import { put, list } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { SiteContent } from '@/types/content';
 import { defaultContent } from '@/lib/default-content';
 
-const KV_KEY = 'belief_english_site_content';
-
 export async function GET() {
   try {
-    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-      const data = await kv.get<SiteContent>(KV_KEY);
-      if (data) {
-        return NextResponse.json(data, {
-          headers: {
-            'Cache-Control': 'no-store, max-age=0, must-revalidate',
-          },
-        });
+    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+
+    if (token && token !== 'vercel_blob_rw_token_here') {
+      try {
+        const listOptions: any = { prefix: 'articles/site-content.json', limit: 1, storeId, token };
+        const blobList = await list(listOptions);
+        if (blobList.blobs && blobList.blobs.length > 0) {
+          const blobUrl = blobList.blobs[0].url;
+          const blobRes = await fetch(blobUrl);
+          if (blobRes.ok) {
+            const data = await blobRes.json();
+            if (data) {
+              return NextResponse.json(data, {
+                headers: { 'Cache-Control': 'no-store, max-age=0, must-revalidate' },
+              });
+            }
+          }
+        }
+      } catch (blobErr) {
+        console.warn('Vercel Storage read fallback:', blobErr);
       }
     }
+
     return NextResponse.json(defaultContent, {
       headers: {
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
       },
     });
   } catch (error) {
-    console.error('Error fetching content from Vercel KV:', error);
+    console.error('Error fetching content from Vercel Storage:', error);
     return NextResponse.json(defaultContent, {
       headers: {
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
@@ -44,15 +55,15 @@ export async function POST(request: Request) {
     };
 
     let blobUrl: string | undefined;
-    // 1. Put to Vercel Blob with storeId
+    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+
+    // Put to Vercel Storage with BLOB_STORE_ID
     try {
-      const storeId =
-        process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
-      const token = process.env.BLOB_READ_WRITE_TOKEN;
       const options: any = {
         access: 'public',
         addRandomSuffix: false,
-        ...(storeId ? { storeId } : {}),
+        storeId,
       };
       if (token && token !== 'vercel_blob_rw_token_here') {
         options.token = token;
@@ -60,16 +71,7 @@ export async function POST(request: Request) {
       const blob = await put('articles/site-content.json', JSON.stringify(payload), options);
       blobUrl = blob.url;
     } catch (bErr) {
-      console.warn('Vercel Blob save notification:', bErr);
-    }
-
-    // 2. Put to Vercel KV if configured
-    try {
-      if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-        await kv.set(KV_KEY, payload);
-      }
-    } catch (kErr) {
-      console.warn('Vercel KV save notification:', kErr);
+      console.warn('Vercel Storage save notification:', bErr);
     }
 
     // Instant Next.js cache purging
@@ -80,7 +82,13 @@ export async function POST(request: Request) {
       // ignore outside next.js runtime
     }
 
-    return NextResponse.json({ success: true, data: payload, blobUrl });
+    return NextResponse.json({
+      success: true,
+      data: payload,
+      blobUrl,
+      storeId,
+      message: 'Đã lưu vào Vercel Storage (BLOB_STORE_ID) thành công!',
+    });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Unknown error updating content';
     console.error('Error saving content:', error);

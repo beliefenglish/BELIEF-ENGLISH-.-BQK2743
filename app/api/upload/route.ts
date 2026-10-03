@@ -20,13 +20,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const storeId =
-      process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
     const token = process.env.BLOB_READ_WRITE_TOKEN;
 
     const options: any = {
       access: 'public',
-      ...(storeId ? { storeId } : {}),
+      storeId,
     };
     if (token && token !== 'vercel_blob_rw_token_here') {
       options.token = token;

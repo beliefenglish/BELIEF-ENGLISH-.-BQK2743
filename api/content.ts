@@ -1,8 +1,5 @@
-import { put } from '@vercel/blob';
-import { kv } from '@vercel/kv';
+import { put, list } from '@vercel/blob';
 import { defaultContent } from '../lib/default-content';
-
-const KV_KEY = 'belief_english_site_content';
 
 export default async function handler(req: any, res: any) {
   // CORS support
@@ -19,23 +16,32 @@ export default async function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
-  // GET: Fetch content from Vercel KV or default
+  const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+
+  // GET: Fetch content from Vercel Storage (BLOB_STORE_ID) or default
   if (req.method === 'GET') {
     try {
-      if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-        const data = await kv.get(KV_KEY);
-        if (data) {
-          return res.status(200).json(data);
+      if (token && token !== 'vercel_blob_rw_token_here') {
+        const listOptions: any = { prefix: 'articles/site-content.json', limit: 1, storeId, token };
+        const blobList = await list(listOptions);
+        if (blobList.blobs && blobList.blobs.length > 0) {
+          const blobUrl = blobList.blobs[0].url;
+          const blobRes = await fetch(blobUrl);
+          if (blobRes.ok) {
+            const data = await blobRes.json();
+            if (data) return res.status(200).json(data);
+          }
         }
       }
       return res.status(200).json(defaultContent);
     } catch (err: any) {
-      console.warn('Error reading from KV, falling back to default:', err);
+      console.warn('Error reading from Vercel Storage, falling back to default:', err);
       return res.status(200).json(defaultContent);
     }
   }
 
-  // POST: Save content to Vercel Blob and KV
+  // POST: Save content to Vercel Storage (BLOB_STORE_ID)
   if (req.method === 'POST') {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -45,38 +51,26 @@ export default async function handler(req: any, res: any) {
       };
 
       let blobResult: any = null;
-      // 1. Save to Vercel Blob (using storeId)
       try {
-        const storeId =
-          process.env.BLOB_STORE_ID || process.env.beliefenglish_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
-        const token = process.env.BLOB_READ_WRITE_TOKEN;
         const options: any = {
           access: 'public',
           addRandomSuffix: false,
-          ...(storeId ? { storeId } : {}),
+          storeId,
         };
         if (token && token !== 'vercel_blob_rw_token_here') {
           options.token = token;
         }
         blobResult = await put('articles/site-content.json', JSON.stringify(payload), options);
       } catch (blobErr) {
-        console.warn('Vercel Blob put notification:', blobErr);
-      }
-
-      // 2. Save to Vercel KV if configured
-      try {
-        if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
-          await kv.set(KV_KEY, payload);
-        }
-      } catch (kvErr) {
-        console.warn('Vercel KV set notification:', kvErr);
+        console.warn('Vercel Storage put notification:', blobErr);
       }
 
       return res.status(200).json({
         success: true,
         data: payload,
         blobUrl: blobResult?.url || null,
-        message: 'Đã lưu dữ liệu hệ thống thành công!',
+        storeId,
+        message: 'Đã lưu dữ liệu vào Vercel Storage (BLOB_STORE_ID) thành công!',
       });
     } catch (error: any) {
       console.error('Error saving content:', error);

@@ -2,7 +2,7 @@ export const revalidate = 0;
 export const dynamic = 'force-dynamic';
 
 import React from 'react';
-import { kv } from '@vercel/kv';
+import { list } from '@vercel/blob';
 import {
   Brain,
   Zap,
@@ -25,14 +25,31 @@ import {
 import { SiteContent } from '@/types/content';
 import { defaultContent } from '@/lib/default-content';
 
-const KV_KEY = 'belief_english_site_content';
-
 async function getSiteContent(): Promise<SiteContent> {
   try {
-    const data = await kv.get<SiteContent>(KV_KEY);
-    return data || defaultContent;
+    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+
+    if (token && token !== 'vercel_blob_rw_token_here') {
+      try {
+        const listOptions: any = { prefix: 'articles/site-content.json', limit: 1, storeId, token };
+        const blobList = await list(listOptions);
+        if (blobList.blobs && blobList.blobs.length > 0) {
+          const blobUrl = blobList.blobs[0].url;
+          const blobRes = await fetch(blobUrl);
+          if (blobRes.ok) {
+            const data = await blobRes.json();
+            if (data) return data;
+          }
+        }
+      } catch (blobErr) {
+        console.warn('Vercel Storage read error in HomePage:', blobErr);
+      }
+    }
+
+    return defaultContent;
   } catch (error) {
-    console.error('Error fetching data from Vercel KV, falling back to default:', error);
+    console.error('Error fetching data from Vercel Storage, falling back to default:', error);
     return defaultContent;
   }
 }
@@ -480,7 +497,7 @@ export default async function HomePage() {
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Quản Trị Hệ Thống</h4>
               <p className="text-xs text-slate-400">
-                Dữ liệu được lưu trữ tự động trên đám mây Vercel KV và Vercel Blob CDN.
+                Dữ liệu được lưu trữ tự động trên đám mây Vercel Storage (BLOB_STORE_ID).
               </p>
               <a
                 href="/admin"

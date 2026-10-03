@@ -204,7 +204,7 @@ export default function AdminPage() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex items-center gap-3 text-[#1e3a8a] font-bold">
           <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
-          <span>Đang nạp cấu hình Vercel KV...</span>
+          <span>Đang nạp cấu hình Vercel Storage...</span>
         </div>
       </div>
     );
@@ -225,7 +225,7 @@ export default function AdminPage() {
             </a>
             <div className="h-5 w-px bg-blue-700 hidden sm:block" />
             <h1 className="text-sm sm:text-base font-black uppercase tracking-wide text-orange-400">
-              Bảng Quản Trị Hệ Thống (Vercel KV & Blob)
+              Bảng Quản Trị Hệ Thống (Vercel Storage BLOB_STORE_ID)
             </h1>
           </div>
 
@@ -698,7 +698,7 @@ export default function AdminPage() {
               className="flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold rounded-2xl shadow-xl transition-all cursor-pointer text-sm"
             >
               {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-              <span>{isSaving ? 'Đang Lưu Vào Vercel KV...' : 'Lưu Tất Cả Thay Đổi'}</span>
+              <span>{isSaving ? 'Đang Lưu Vào Vercel Storage...' : 'Lưu Tất Cả Thay Đổi'}</span>
             </button>
           </div>
         </form>

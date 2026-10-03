@@ -136,7 +136,7 @@ export default function VercelStorageManager() {
             Trung Tâm Lưu Trữ Vercel & Xuất/Nhập Dữ Liệu
           </h3>
           <p className="text-xs text-slate-500 max-w-2xl mt-0.5">
-            Quản lý đồng bộ máy chủ Vercel Storage (Blob & KV), tải file sao lưu toàn bộ website hoặc xuất các báo cáo học viên, khóa học ra file Excel/CSV.
+            Quản lý đồng bộ máy chủ Vercel Storage (duy nhất BLOB_STORE_ID), tải file sao lưu toàn bộ website hoặc xuất các báo cáo học viên, khóa học ra file Excel/CSV.
           </p>
         </div>
 
@@ -313,52 +313,46 @@ export default function VercelStorageManager() {
           </div>
         </div>
 
-        {/* Card 3: Vercel KV Database */}
+        {/* Card 3: Vercel Storage Exclusive Identity */}
         <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold">
                 <Database className="w-5 h-5" />
               </div>
-              <span
-                className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                  storageStatus?.hasKv
-                    ? 'bg-purple-100 text-purple-800'
-                    : 'bg-slate-100 text-slate-600'
-                }`}
-              >
-                {storageStatus?.hasKv ? 'Đã Kết Nối KV' : 'Tùy Chọn'}
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800">
+                Độc Quyền Blob
               </span>
             </div>
 
             <h4 className="text-sm font-black text-slate-800 mb-1">
-              3. Vercel KV Database (Redis)
+              3. Định Danh Kho Độc Quyền
             </h4>
             <p className="text-xs text-slate-500 mb-3">
-              Cơ sở dữ liệu NoSQL Key-Value tốc độ cao cho ứng dụng Vercel Serverless.
+              Chỉ sử dụng duy nhất Vercel Storage (BLOB_STORE_ID), mọi dữ liệu website và tệp tin đều được đồng bộ hóa đồng nhất.
             </p>
 
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Khóa dữ liệu:</span>
-                <span className="font-mono font-bold text-purple-900 text-[11px]">belief_english_site_content</span>
+                <span className="text-slate-500 font-medium">Kho áp dụng:</span>
+                <span className="font-mono font-bold text-purple-900 text-[11px]">BLOB_STORE_ID</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 font-medium">Trạng thái:</span>
-                <span className="text-slate-700 text-[11px]">
-                  {storageStatus?.hasKv ? 'Đang hoạt động' : 'Tự động sao lưu kép'}
+                <span className="text-emerald-700 font-bold text-[11px]">
+                  Kích hoạt duy nhất
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500 font-medium">Đồng bộ:</span>
-                <span className="text-slate-500 text-[11px]">Tự động khi lưu</span>
+                <span className="text-slate-500 font-medium">Lưu trữ khác:</span>
+                <span className="text-slate-400 text-[11px]">Đã lược bỏ hoàn toàn</span>
               </div>
             </div>
           </div>
 
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-            <span>Dự phòng máy chủ</span>
-            <span className="font-mono text-[10px]">Upstash Redis</span>
+            <span>Tiêu chuẩn hệ thống</span>
+            <span className="font-mono text-[10px]">Vercel Blob Storage</span>
           </div>
         </div>
       </div>
