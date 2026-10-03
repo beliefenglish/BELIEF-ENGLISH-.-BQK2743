@@ -1,0 +1,400 @@
+import React, { useState } from 'react';
+import {
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  Settings,
+  ArrowLeft,
+  Sparkles,
+  Phone,
+  Calendar,
+  CheckCircle,
+  AlertCircle,
+  Clock,
+  TrendingUp,
+  Award,
+  ExternalLink,
+  Image as ImageIcon,
+  FolderOpen,
+  LogOut,
+  Key,
+  ShieldCheck,
+  X,
+  Save,
+  Loader2,
+} from 'lucide-react';
+import BeliefLogo from '../BeliefLogo';
+import LeadsManager from './LeadsManager';
+import CoursesManager from './CoursesManager';
+import SettingsManager from './SettingsManager';
+import MediaManager from './MediaManager';
+import LibraryManager from './LibraryManager';
+import VercelStorageManager from './VercelStorageManager';
+import AdminLoginModal from './AdminLoginModal';
+import { useAdmin } from '../../context/AdminContext';
+import { Cloud, Download, FileJson } from 'lucide-react';
+
+export default function AdminDashboard() {
+  const {
+    adminAuth,
+    logoutAdmin,
+    changeAdminPassword,
+    setIsAdminView,
+    leads,
+    courses,
+    libraryBooks,
+    isSyncing,
+    lastSyncedAt,
+    saveAllToCloud,
+    exportFullSiteJSON,
+    storageStatus,
+  } = useAdmin();
+
+  const [activeTab, setActiveTab] = useState<'leads' | 'courses' | 'media' | 'library' | 'settings' | 'storage'>('leads');
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [pwdMsg, setPwdMsg] = useState<{ text: string; error?: boolean } | null>(null);
+  const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error'; message: string; blobUrl?: string; details?: any } | null>(null);
+
+  const handleCloudSave = async () => {
+    const res = await saveAllToCloud();
+    setSaveStatus({
+      type: res.success ? 'success' : 'error',
+      message: res.message,
+      blobUrl: res.blobUrl,
+      details: res.details,
+    });
+    setTimeout(() => {
+      setSaveStatus(null);
+    }, 6000);
+  };
+
+  // If not logged in, show Login Screen
+  if (!adminAuth.isAuthenticated) {
+    return <AdminLoginModal onBackToSite={() => setIsAdminView(false)} />;
+  }
+
+  const pendingLeads = leads.filter(l => l.status === 'new').length;
+
+  const handleChangePassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwdMsg(null);
+    const res = changeAdminPassword(oldPassword, newPassword);
+    if (res.success) {
+      setPwdMsg({ text: 'Đã đổi mật khẩu thành công!' });
+      setOldPassword('');
+      setNewPassword('');
+      setTimeout(() => {
+        setIsPasswordModalOpen(false);
+        setPwdMsg(null);
+      }, 1500);
+    } else {
+      setPwdMsg({ text: res.error || 'Đổi mật khẩu thất bại.', error: true });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
+      {/* Top Admin Navigation Bar */}
+      <header className="sticky top-0 z-50 bg-[#1e3a8a] text-white shadow-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Brand Logo & Portal Title */}
+            <div className="flex items-center gap-3">
+              <BeliefLogo variant="white" size="sm" showSubtitle={false} />
+              <div className="h-6 w-px bg-blue-700 hidden sm:block"></div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm font-black tracking-wide text-orange-300 uppercase">
+                  Bảng Quản Trị Hệ Thống
+                </span>
+                <span className="hidden md:inline px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-800 text-blue-200 border border-blue-700">
+                  BELIS Admin Portal
+                </span>
+              </div>
+            </div>
+
+            {/* Right Action Controls: Save Button, Export Button, Owner Email, Password, Logout, Return */}
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {/* PRIMARY SAVE BUTTON */}
+              <button
+                onClick={handleCloudSave}
+                disabled={isSyncing}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg hover:shadow-orange-500/25 active:scale-95 disabled:opacity-50 transition-all cursor-pointer border border-amber-300/30"
+                title="Lưu toàn bộ dữ liệu vào Vercel Blob & Local Server Storage"
+              >
+                {isSyncing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4" />
+                )}
+                <span>{isSyncing ? 'Đang Lưu...' : 'Lưu Thay Đổi'}</span>
+              </button>
+
+              {/* QUICK EXPORT JSON BUTTON */}
+              <button
+                onClick={exportFullSiteJSON}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-blue-900/80 hover:bg-blue-800 text-blue-100 hover:text-white border border-blue-700 transition-all cursor-pointer"
+                title="Tải ngay file backup JSON toàn bộ website về máy tính"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Xuất File JSON</span>
+              </button>
+
+              {/* Owner Email Pill */}
+              <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/60 border border-blue-700 text-xs text-blue-100">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="font-semibold">{adminAuth.email}</span>
+                {lastSyncedAt && (
+                  <span className="text-[10px] text-emerald-300 font-mono pl-1">
+                    • Lưu lúc {lastSyncedAt}
+                  </span>
+                )}
+              </div>
+
+              {/* Change Password Button */}
+              <button
+                onClick={() => setIsPasswordModalOpen(true)}
+                className="p-2 rounded-xl text-blue-200 hover:text-white hover:bg-white/10 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                title="Đổi mật khẩu quản trị"
+              >
+                <Key className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Đổi MK</span>
+              </button>
+
+              {/* Back to Live Website Button */}
+              <button
+                onClick={() => setIsAdminView(false)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Xem Trang Web</span>
+              </button>
+
+              {/* Logout Button */}
+              <button
+                onClick={logoutAdmin}
+                className="p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/30 flex items-center gap-1 transition-colors cursor-pointer"
+                title="Đăng xuất khỏi Dashboard"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Đăng Xuất</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Cloud Save Notification Bar */}
+      {saveStatus && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 w-full">
+          <div
+            className={`p-4 rounded-2xl flex items-center justify-between gap-3 shadow-md border ${
+              saveStatus.type === 'success'
+                ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+                : 'bg-red-50 border-red-300 text-red-900'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              {saveStatus.type === 'success' ? (
+                <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+              )}
+              <div>
+                <span className="text-xs sm:text-sm font-bold block">{saveStatus.message}</span>
+                {saveStatus.blobUrl && (
+                  <span className="text-[11px] text-emerald-700 underline truncate block mt-0.5">
+                    Tệp lưu trữ: {saveStatus.blobUrl}
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={() => setSaveStatus(null)}
+              className="text-xs font-bold px-2 py-1 rounded-lg hover:bg-black/5 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Body with Tab Navigation */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap items-center gap-2 mb-8 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs">
+          <button
+            onClick={() => setActiveTab('leads')}
+            className={`flex-1 min-w-[150px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'leads'
+                ? 'bg-[#1e3a8a] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Đăng Ký Học Viên</span>
+            {pendingLeads > 0 && (
+              <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-[10px] font-black flex items-center justify-center">
+                {pendingLeads}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('courses')}
+            className={`flex-1 min-w-[150px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'courses'
+                ? 'bg-[#1e3a8a] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Khóa Học ({courses.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('media')}
+            className={`flex-1 min-w-[150px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'media'
+                ? 'bg-[#1e3a8a] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <ImageIcon className="w-4 h-4" />
+            <span>Upload Logo & Hình Ảnh</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`flex-1 min-w-[150px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'library'
+                ? 'bg-[#1e3a8a] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <FolderOpen className="w-4 h-4" />
+            <span>Thư Viện Sách & Link ({libraryBooks.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`flex-1 min-w-[150px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'settings'
+                ? 'bg-[#1e3a8a] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <Settings className="w-4 h-4" />
+            <span>Cài Đặt Website</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('storage')}
+            className={`flex-1 min-w-[160px] py-3 px-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === 'storage'
+                ? 'bg-gradient-to-r from-[#1e3a8a] to-blue-900 text-white shadow-md'
+                : 'text-slate-700 hover:text-[#1e3a8a] hover:bg-blue-50/60'
+            }`}
+          >
+            <Cloud className="w-4 h-4 text-orange-400" />
+            <span>Vercel Storage & Xuất File</span>
+            {storageStatus?.hasBlobToken ? (
+              <span className="w-2 h-2 rounded-full bg-emerald-400" title="Đã có Token Vercel"></span>
+            ) : (
+              <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-orange-100 text-orange-700 border border-orange-200">
+                Store
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Tab Content Display */}
+        {activeTab === 'leads' && <LeadsManager />}
+        {activeTab === 'courses' && <CoursesManager />}
+        {activeTab === 'media' && <MediaManager />}
+        {activeTab === 'library' && <LibraryManager />}
+        {activeTab === 'settings' && <SettingsManager />}
+        {activeTab === 'storage' && <VercelStorageManager />}
+      </div>
+
+      {/* Change Password Modal */}
+      {isPasswordModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative border border-slate-100 space-y-4">
+            <button
+              onClick={() => setIsPasswordModalOpen(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:bg-slate-100 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <h3 className="text-lg font-black text-[#1e3a8a]">
+                Đổi Mật Khẩu Quản Trị
+              </h3>
+              <p className="text-xs text-slate-500">
+                Tài khoản: {adminAuth.email}
+              </p>
+            </div>
+
+            {pwdMsg && (
+              <div
+                className={`p-3 rounded-xl text-xs font-bold ${
+                  pwdMsg.error ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                }`}
+              >
+                {pwdMsg.text}
+              </div>
+            )}
+
+            <form onSubmit={handleChangePassword} className="space-y-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Mật khẩu hiện tại *</label>
+                <input
+                  type="password"
+                  required
+                  value={oldPassword}
+                  onChange={e => setOldPassword(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Mật khẩu mới (tối thiểu 6 ký tự) *</label>
+                <input
+                  type="password"
+                  required
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordModalOpen(false)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg cursor-pointer"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 text-xs font-bold bg-[#1e3a8a] text-white rounded-lg hover:bg-blue-900 shadow-sm cursor-pointer"
+                >
+                  Cập Nhật Mật Khẩu
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+        <p>Hệ thống Quản trị Nội bộ • Trung tâm Ngoại ngữ Niềm Tin - Belief English (BELIS GROUP)</p>
+      </footer>
+    </div>
+  );
+}
