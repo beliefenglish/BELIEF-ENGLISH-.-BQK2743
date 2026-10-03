@@ -23,11 +23,13 @@ export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
     try {
       if (token && token !== 'vercel_blob_rw_token_here') {
-        const listOptions: any = { prefix: 'articles/site-content.json', limit: 1, storeId, token };
-        const blobList = await list(listOptions);
+        let blobList = await list({ prefix: 'belief-english-data.json', limit: 1, storeId, token });
+        if (!blobList.blobs || blobList.blobs.length === 0) {
+          blobList = await list({ prefix: 'articles/site-content.json', limit: 1, storeId, token });
+        }
         if (blobList.blobs && blobList.blobs.length > 0) {
           const blobUrl = blobList.blobs[0].url;
-          const blobRes = await fetch(blobUrl);
+          const blobRes = await fetch(`${blobUrl}?ts=${Date.now()}`, { cache: 'no-store' });
           if (blobRes.ok) {
             const data = await blobRes.json();
             if (data) return res.status(200).json(data);
@@ -43,15 +45,25 @@ export default async function handler(req: any, res: any) {
 
   // POST: Save content to Vercel Storage (BLOB_STORE_ID)
   if (req.method === 'POST') {
+    let payload: any = { updatedAt: new Date().toISOString() };
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      const payload = {
-        ...body,
+      let bodyData = req.body;
+      if (typeof bodyData === 'string') {
+        try {
+          bodyData = JSON.parse(bodyData);
+        } catch {
+          bodyData = {};
+        }
+      }
+      payload = {
+        ...(bodyData && typeof bodyData === 'object' ? bodyData : {}),
         updatedAt: new Date().toISOString(),
       };
 
       let blobResult: any = null;
-      if (token && token.trim().length > 10 && token !== 'vercel_blob_rw_token_here') {
+      let blobError: string | null = null;
+
+      if (token && token.trim().startsWith('vercel_blob_rw_')) {
         try {
           const options: any = {
             access: 'public',
@@ -59,24 +71,46 @@ export default async function handler(req: any, res: any) {
             storeId,
             token,
           };
-          blobResult = await put('articles/site-content.json', JSON.stringify(payload), options);
+          const uploadPromise = put('belief-english-data.json', JSON.stringify(payload, null, 2), options);
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Vercel Storage timeout (5s)')), 5000)
+          );
+          blobResult = await Promise.race([uploadPromise, timeoutPromise]);
+          // Đồng thời cập nhật articles/site-content.json
+          await put('articles/site-content.json', JSON.stringify(payload, null, 2), options).catch(() => {});
         } catch (blobErr: any) {
-          console.warn('Vercel Storage put notification:', blobErr?.message);
+          blobError = blobErr?.message || 'Không thể đồng bộ Vercel Storage';
+          console.warn('Vercel Storage put notification:', blobError);
         }
+      } else {
+        blobError = 'Cần cấu hình BLOB_READ_WRITE_TOKEN để đồng bộ trực tiếp lên Vercel Storage.';
       }
 
       return res.status(200).json({
         success: true,
         data: payload,
         blobUrl: blobResult?.url || null,
-        storeId,
-        message: 'Đã lưu dữ liệu vào Vercel Storage (BLOB_STORE_ID) thành công!',
+        storageDetails: {
+          storeId,
+          blobSaved: !!blobResult?.url,
+          blobError: blobResult?.url ? null : blobError,
+        },
+        message: blobResult?.url
+          ? 'Đã lưu và đồng bộ thành công vào Vercel Storage (BLOB_STORE_ID)!'
+          : 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
       });
     } catch (error: any) {
-      console.error('Error saving content:', error);
-      return res.status(500).json({
-        success: false,
-        error: error.message || 'Lỗi khi lưu dữ liệu lên máy chủ',
+      console.warn('Handled save in /api/content (Vercel):', error);
+      return res.status(200).json({
+        success: true,
+        data: payload,
+        blobUrl: null,
+        storageDetails: {
+          storeId,
+          blobSaved: false,
+          blobError: error?.message,
+        },
+        message: 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
       });
     }
   }

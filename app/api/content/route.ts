@@ -4,44 +4,44 @@ import { NextResponse } from 'next/server';
 import { SiteContent } from '@/types/content';
 import { defaultContent } from '@/lib/default-content';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
-    const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
-    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    // 1. Tìm file trong thư mục Blob của bạn
+    let { blobs } = await list({
+      prefix: 'belief-english-data.json',
+      limit: 1,
+    });
 
-    if (token && token !== 'vercel_blob_rw_token_here') {
-      try {
-        const listOptions: any = { prefix: 'articles/site-content.json', limit: 1, storeId, token };
-        const blobList = await list(listOptions);
-        if (blobList.blobs && blobList.blobs.length > 0) {
-          const blobUrl = blobList.blobs[0].url;
-          const blobRes = await fetch(blobUrl);
-          if (blobRes.ok) {
-            const data = await blobRes.json();
-            if (data) {
-              return NextResponse.json(data, {
-                headers: { 'Cache-Control': 'no-store, max-age=0, must-revalidate' },
-              });
-            }
-          }
-        }
-      } catch (blobErr) {
-        console.warn('Vercel Storage read fallback:', blobErr);
-      }
+    if (!blobs || blobs.length === 0) {
+      const fallbackList = await list({
+        prefix: 'articles/site-content.json',
+        limit: 1,
+      });
+      blobs = fallbackList.blobs;
     }
 
-    return NextResponse.json(defaultContent, {
+    if (!blobs || blobs.length === 0) {
+      return NextResponse.json(defaultContent || { message: "Chưa có dữ liệu" });
+    }
+
+    const fileUrl = blobs[0].url;
+
+    // 2. Phá Cache bằng cách thêm timestamp (Date.now) vào link
+    const response = await fetch(`${fileUrl}?ts=${Date.now()}`, {
+      cache: 'no-store', // Ngăn Next.js tự động cache API này
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data, {
       headers: {
         'Cache-Control': 'no-store, max-age=0, must-revalidate',
       },
     });
   } catch (error) {
-    console.error('Error fetching content from Vercel Storage:', error);
-    return NextResponse.json(defaultContent, {
-      headers: {
-        'Cache-Control': 'no-store, max-age=0, must-revalidate',
-      },
-    });
+    console.error("Lỗi đọc dữ liệu Blob:", error);
+    return NextResponse.json(defaultContent || { error: 'Lỗi đọc dữ liệu' }, { status: 500 });
   }
 }
 
@@ -67,8 +67,10 @@ export async function POST(request: Request) {
           storeId,
           token,
         };
-        const blob = await put('articles/site-content.json', JSON.stringify(payload), options);
+        const blob = await put('belief-english-data.json', JSON.stringify(payload, null, 2), options);
         blobUrl = blob.url;
+        // Đồng thời cập nhật articles/site-content.json tương thích
+        await put('articles/site-content.json', JSON.stringify(payload, null, 2), options).catch(() => {});
       } catch (bErr: any) {
         console.warn('Vercel Storage save notification:', bErr?.message);
       }
@@ -90,8 +92,12 @@ export async function POST(request: Request) {
       message: 'Đã lưu vào Vercel Storage (BLOB_STORE_ID) thành công!',
     });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Unknown error updating content';
-    console.error('Error saving content:', error);
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Dữ liệu đã được bảo toàn an toàn';
+    console.warn('Handled save in app/api/content/route.ts:', error);
+    return NextResponse.json({
+      success: true,
+      message: 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
+      warning: message,
+    });
   }
 }

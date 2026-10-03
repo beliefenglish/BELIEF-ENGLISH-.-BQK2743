@@ -139,13 +139,13 @@ Formatting & Tone:
       if (token && token.trim().startsWith('vercel_blob_rw_')) {
         try {
           const { list } = await import('@vercel/blob');
-          const listOptions: any = { prefix: 'articles/site-content.json', limit: 1 };
-          if (storeId) listOptions.storeId = storeId;
-          listOptions.token = token;
-          const blobList = await list(listOptions);
+          let blobList = await list({ prefix: 'belief-english-data.json', limit: 1, ...(storeId ? { storeId } : {}), token });
+          if (!blobList.blobs || blobList.blobs.length === 0) {
+            blobList = await list({ prefix: 'articles/site-content.json', limit: 1, ...(storeId ? { storeId } : {}), token });
+          }
           if (blobList.blobs && blobList.blobs.length > 0) {
             const blobUrl = blobList.blobs[0].url;
-            const blobRes = await fetch(blobUrl);
+            const blobRes = await fetch(`${blobUrl}?ts=${Date.now()}`, { cache: 'no-store' });
             if (blobRes.ok) {
               const blobData = await blobRes.json();
               if (blobData) {
@@ -216,11 +216,13 @@ Formatting & Tone:
             storeId,
             token,
           };
-          const uploadPromise = put('articles/site-content.json', JSON.stringify(payload, null, 2), putOptions);
+          const uploadPromise = put('belief-english-data.json', JSON.stringify(payload, null, 2), putOptions);
           const timeoutPromise = new Promise((_, reject) =>
             setTimeout(() => reject(new Error('Vercel Storage timeout (5s)')), 5000)
           );
           blobResult = (await Promise.race([uploadPromise, timeoutPromise])) as any;
+          // Đồng thời cập nhật articles/site-content.json
+          put('articles/site-content.json', JSON.stringify(payload, null, 2), putOptions).catch(() => {});
         } catch (bErr: any) {
           blobError = bErr?.message || 'Không thể đồng bộ Vercel Storage';
           console.warn('Vercel Storage sync note:', blobError);

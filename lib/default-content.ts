@@ -1,4 +1,4 @@
-import { SiteContent } from '@/types/content';
+import type { SiteContent } from '../types/content';
 
 export const defaultContent: SiteContent = {
   brand: {
