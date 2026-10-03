@@ -248,7 +248,9 @@ export default function VercelStorageManager() {
               <div className="flex items-center justify-between">
                 <span className="text-slate-500 font-medium">Quyền đọc/ghi:</span>
                 <span className={`font-bold text-[11px] ${storageStatus?.hasBlobToken ? 'text-emerald-600' : 'text-amber-600'}`}>
-                  {storageStatus?.hasBlobToken ? 'Hoạt động (Token OK)' : 'Cần BLOB_READ_WRITE_TOKEN'}
+                  {storageStatus?.hasBlobToken
+                    ? 'Hoạt động (Token OK)'
+                    : (storageStatus?.isTokenStoreId ? 'Cần Token (Đang là Store ID)' : 'Cần BLOB_READ_WRITE_TOKEN')}
                 </span>
               </div>
             </div>

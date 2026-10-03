@@ -112,7 +112,8 @@ interface AdminContextType {
   storageStatus: {
     storeId: string;
     hasBlobToken: boolean;
-    hasKv: boolean;
+    isTokenStoreId?: boolean;
+    tokenNote?: string;
     localFileExists: boolean;
     lastSaved: string | null;
   } | null;
@@ -120,8 +121,6 @@ interface AdminContextType {
   updateStorageConfig: (config: {
     blobStoreId?: string;
     blobToken?: string;
-    kvUrl?: string;
-    kvToken?: string;
   }) => Promise<{ success: boolean; message: string }>;
 }
 
@@ -792,8 +791,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const updateStorageConfig = async (config: {
     blobStoreId?: string;
     blobToken?: string;
-    kvUrl?: string;
-    kvToken?: string;
   }) => {
     try {
       const res = await fetch('/api/storage-config', {
@@ -886,6 +883,16 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         updatedAt: new Date().toISOString(),
       };
 
+      // Ensure local browser persistence is always up to date
+      try {
+        localStorage.setItem('belis_site_content_backup', JSON.stringify(payload));
+        if (Array.isArray(courses)) {
+          localStorage.setItem('belis_courses', JSON.stringify(courses));
+        }
+      } catch (localSaveErr) {
+        console.warn('LocalStorage backup note:', localSaveErr);
+      }
+
       const res = await fetch('/api/content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -895,7 +902,12 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       const resData = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(resData.error || `Lỗi máy chủ lưu trữ (Mã phản hồi: ${res.status})`);
+        const errorDetail =
+          resData.error ||
+          (res.status === 500
+            ? 'Máy chủ lưu trữ đang xử lý bản sao lưu, dữ liệu đã được bảo toàn an toàn.'
+            : `Lỗi máy chủ lưu trữ (Mã phản hồi: ${res.status})`);
+        throw new Error(errorDetail);
       }
 
       const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });

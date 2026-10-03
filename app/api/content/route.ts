@@ -59,19 +59,19 @@ export async function POST(request: Request) {
     const token = process.env.BLOB_READ_WRITE_TOKEN;
 
     // Put to Vercel Storage with BLOB_STORE_ID
-    try {
-      const options: any = {
-        access: 'public',
-        addRandomSuffix: false,
-        storeId,
-      };
-      if (token && token !== 'vercel_blob_rw_token_here') {
-        options.token = token;
+    if (token && token.trim().length > 10 && token !== 'vercel_blob_rw_token_here') {
+      try {
+        const options: any = {
+          access: 'public',
+          addRandomSuffix: false,
+          storeId,
+          token,
+        };
+        const blob = await put('articles/site-content.json', JSON.stringify(payload), options);
+        blobUrl = blob.url;
+      } catch (bErr: any) {
+        console.warn('Vercel Storage save notification:', bErr?.message);
       }
-      const blob = await put('articles/site-content.json', JSON.stringify(payload), options);
-      blobUrl = blob.url;
-    } catch (bErr) {
-      console.warn('Vercel Storage save notification:', bErr);
     }
 
     // Instant Next.js cache purging

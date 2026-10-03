@@ -51,18 +51,18 @@ export default async function handler(req: any, res: any) {
       };
 
       let blobResult: any = null;
-      try {
-        const options: any = {
-          access: 'public',
-          addRandomSuffix: false,
-          storeId,
-        };
-        if (token && token !== 'vercel_blob_rw_token_here') {
-          options.token = token;
+      if (token && token.trim().length > 10 && token !== 'vercel_blob_rw_token_here') {
+        try {
+          const options: any = {
+            access: 'public',
+            addRandomSuffix: false,
+            storeId,
+            token,
+          };
+          blobResult = await put('articles/site-content.json', JSON.stringify(payload), options);
+        } catch (blobErr: any) {
+          console.warn('Vercel Storage put notification:', blobErr?.message);
         }
-        blobResult = await put('articles/site-content.json', JSON.stringify(payload), options);
-      } catch (blobErr) {
-        console.warn('Vercel Storage put notification:', blobErr);
       }
 
       return res.status(200).json({
