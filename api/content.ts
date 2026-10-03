@@ -1,5 +1,14 @@
-import { put, list } from '@vercel/blob';
+import { createClient } from '@supabase/supabase-js';
 import { defaultContent } from '../lib/default-content';
+
+function getSupabase() {
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+  if (url && key) {
+    return createClient(url, key);
+  }
+  return null;
+}
 
 export default async function handler(req: any, res: any) {
   // CORS support
@@ -16,36 +25,31 @@ export default async function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
-  const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
-  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  const supabase = getSupabase();
 
-  // GET: Fetch content from Vercel Storage (BLOB_STORE_ID) or default
+  // GET: Fetch content from Supabase
   if (req.method === 'GET') {
     try {
-      if (token && token !== 'vercel_blob_rw_token_here') {
-        let blobList = await list({ prefix: 'belief-english-data.json', limit: 1, storeId, token });
-        if (!blobList.blobs || blobList.blobs.length === 0) {
-          blobList = await list({ prefix: 'articles/site-content.json', limit: 1, storeId, token });
-        }
-        if (blobList.blobs && blobList.blobs.length > 0) {
-          const blobUrl = blobList.blobs[0].url;
-          const blobRes = await fetch(`${blobUrl}?ts=${Date.now()}`, { cache: 'no-store' });
-          if (blobRes.ok) {
-            const data = await blobRes.json();
-            if (data) return res.status(200).json(data);
-          }
+      if (supabase) {
+        const { data, error } = await supabase
+          .from('site_content')
+          .select('data')
+          .eq('id', 'belief_english')
+          .single();
+
+        if (!error && data && data.data) {
+          return res.status(200).json(data.data);
         }
       }
       return res.status(200).json(defaultContent);
     } catch (err: any) {
-      console.warn('Error reading from Vercel Storage, falling back to default:', err);
-      return res.status(200).json(defaultContent);
+      console.error('Lỗi đọc dữ liệu từ Supabase:', err);
+      return res.status(500).json({ error: err.message || 'Lỗi đọc dữ liệu' });
     }
   }
 
-  // POST: Save content to Vercel Storage (BLOB_STORE_ID)
+  // POST: Save content to Supabase
   if (req.method === 'POST') {
-    let payload: any = { updatedAt: new Date().toISOString() };
     try {
       let bodyData = req.body;
       if (typeof bodyData === 'string') {
@@ -55,63 +59,28 @@ export default async function handler(req: any, res: any) {
           bodyData = {};
         }
       }
-      payload = {
-        ...(bodyData && typeof bodyData === 'object' ? bodyData : {}),
-        updatedAt: new Date().toISOString(),
-      };
 
-      let blobResult: any = null;
-      let blobError: string | null = null;
+      if (supabase) {
+        const { error } = await supabase
+          .from('site_content')
+          .upsert({
+            id: 'belief_english',
+            data: bodyData,
+          });
 
-      if (token && token.trim().startsWith('vercel_blob_rw_')) {
-        try {
-          const options: any = {
-            access: 'public',
-            addRandomSuffix: false,
-            storeId,
-            token,
-          };
-          const uploadPromise = put('belief-english-data.json', JSON.stringify(payload, null, 2), options);
-          const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Vercel Storage timeout (5s)')), 5000)
-          );
-          blobResult = await Promise.race([uploadPromise, timeoutPromise]);
-          // Đồng thời cập nhật articles/site-content.json
-          await put('articles/site-content.json', JSON.stringify(payload, null, 2), options).catch(() => {});
-        } catch (blobErr: any) {
-          blobError = blobErr?.message || 'Không thể đồng bộ Vercel Storage';
-          console.warn('Vercel Storage put notification:', blobError);
+        if (error) {
+          console.error('Lỗi lưu vào Supabase:', error);
+          return res.status(500).json({ error: error.message || 'Lỗi lưu dữ liệu' });
         }
-      } else {
-        blobError = 'Cần cấu hình BLOB_READ_WRITE_TOKEN để đồng bộ trực tiếp lên Vercel Storage.';
       }
 
       return res.status(200).json({
         success: true,
-        data: payload,
-        blobUrl: blobResult?.url || null,
-        storageDetails: {
-          storeId,
-          blobSaved: !!blobResult?.url,
-          blobError: blobResult?.url ? null : blobError,
-        },
-        message: blobResult?.url
-          ? 'Đã lưu và đồng bộ thành công vào Vercel Storage (BLOB_STORE_ID)!'
-          : 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
+        message: 'Đã lưu dữ liệu vào Supabase thành công!',
       });
     } catch (error: any) {
-      console.warn('Handled save in /api/content (Vercel):', error);
-      return res.status(200).json({
-        success: true,
-        data: payload,
-        blobUrl: null,
-        storageDetails: {
-          storeId,
-          blobSaved: false,
-          blobError: error?.message,
-        },
-        message: 'Đã lưu an toàn toàn bộ dữ liệu vào Vercel Storage (BLOB_STORE_ID) và máy chủ!',
-      });
+      console.error('Lỗi ghi dữ liệu Supabase:', error);
+      return res.status(500).json({ error: error.message || 'Lỗi lưu dữ liệu' });
     }
   }
 

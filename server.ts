@@ -133,6 +133,23 @@ Formatting & Tone:
         return res.json(cachedContent);
       }
 
+      // Check Supabase Database
+      const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+      if (supabaseUrl && supabaseKey) {
+        try {
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          const { data, error } = await supabase.from('site_content').select('data').eq('id', 'belief_english').single();
+          if (!error && data && data.data) {
+            cachedContent = data.data;
+            return res.json(data.data);
+          }
+        } catch (supabaseErr) {
+          console.warn('Supabase fetch note:', supabaseErr);
+        }
+      }
+
       // Check Vercel Storage via @vercel/blob using BLOB_STORE_ID
       const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
       const token = process.env.BLOB_READ_WRITE_TOKEN;
@@ -196,7 +213,20 @@ Formatting & Tone:
         console.error('Error writing DATA_FILE:', fileErr);
       }
 
-      // 2. Vercel Storage (Blob) Integration using BLOB_STORE_ID
+      // 2. Supabase Integration
+      const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+      if (supabaseUrl && supabaseKey) {
+        try {
+          const { createClient } = await import('@supabase/supabase-js');
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          await supabase.from('site_content').upsert({ id: 'belief_english', data: payload });
+        } catch (supabaseSaveErr) {
+          console.warn('Supabase save note:', supabaseSaveErr);
+        }
+      }
+
+      // 3. Vercel Storage (Blob) Integration using BLOB_STORE_ID
       let blobResult: any = null;
       let blobError: string | null = null;
       const storeId = process.env.BLOB_STORE_ID || 'store_yqfQ1QZXHcRAnBK9';
