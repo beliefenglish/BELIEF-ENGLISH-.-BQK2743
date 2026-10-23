@@ -5,8 +5,6 @@ import {
   CheckCircle,
   RotateCcw,
   Sparkles,
-  Trash2,
-  ExternalLink,
   Save,
   Loader2,
 } from 'lucide-react';
@@ -91,15 +89,41 @@ export default function MediaManager() {
   };
 
   const categoryList = [
-    { id: 'kindy', name: 'Hệ Kindy (Mầm non 3-6T)', desc: 'Ảnh minh họa lớp học mầm non, vui chơi, thẩm thấu' },
-    { id: 'ready', name: 'Hệ Ready (Vá mất gốc 6-9T)', desc: 'Ảnh học sinh tiểu học, củng cố ngữ pháp, tự tin' },
-    { id: 'starters', name: 'Cambridge Starters (Pre-A1)', desc: 'Ảnh luyện thi chứng chỉ, tranh vẽ, học sinh 7-8T' },
-    { id: 'movers', name: 'Cambridge Movers (A1)', desc: 'Ảnh học sinh 8-10T, kỹ năng nghe nói tương tác' },
-    { id: 'flyers', name: 'Cambridge Flyers (A2)', desc: 'Ảnh học sinh 10-12T, chuyển cấp chuyên' },
-    { id: 'ket', name: 'Cambridge KET (A2 Key)', desc: 'Ảnh học sinh THCS, rèn luyện tiếng Anh học thuật' },
-    { id: 'pet', name: 'Cambridge PET (B1 Preliminary)', desc: 'Ảnh học sinh ôn luyện miễn thi tốt nghiệp THPT' },
-    { id: 'ielts', name: 'Luyện Thi IELTS (Academic & Expert)', desc: 'Ảnh giảng viên và học sinh bứt phá band 6.5 - 8.0+' },
-    { id: 'adults', name: 'Hệ Adults (Giao tiếp người lớn)', desc: 'Ảnh lớp học người đi làm, thuyết trình công sở' },
+    {
+      id: 'starters',
+      name: "Tiếng Anh Thiếu Nhi (Kid's Box) - STARTERS (5-8T • 10 khóa)",
+      desc: "Ảnh minh họa lớp Starters (STA 1 - STA 10), giáo trình Kid's Box Starters, 1 & 2",
+    },
+    {
+      id: 'movers',
+      name: "Tiếng Anh Thiếu Nhi (Kid's Box) - MOVERS (8-9T • 6 khóa)",
+      desc: "Ảnh minh họa lớp Movers (MOV 1 - MOV 6), giáo trình Kid's Box 3 & 4",
+    },
+    {
+      id: 'flyers',
+      name: "Tiếng Anh Thiếu Nhi (Kid's Box) - FLYERS (9-10T • 6 khóa)",
+      desc: "Ảnh minh họa lớp Flyers (FLY 1 - FLY 6), giáo trình Kid's Box 5 & 6",
+    },
+    {
+      id: 'ket',
+      name: 'Luyện Thi Chứng Chỉ KET (A2) (9-12T • 10 khóa)',
+      desc: 'Ảnh học sinh luyện thi KET 1 - KET 10, Complete & Compact Key for Schools A2',
+    },
+    {
+      id: 'pet',
+      name: 'Luyện Thi Chứng Chỉ PET (B1) (11-14T • 10 khóa)',
+      desc: 'Ảnh học sinh luyện thi PET 1 - PET 10, Complete & Compact Preliminary for Schools',
+    },
+    {
+      id: 'ielts',
+      name: 'Luyện Thi IELTS (15+ • 12 khóa)',
+      desc: 'Ảnh học viên luyện thi IEL 1 - IEL 12, giáo trình Mindset for IELTS 1, 2, 3',
+    },
+    {
+      id: 'adults',
+      name: 'Tiếng Anh Giao Tiếp - ADULTS (18+ • 4 khóa)',
+      desc: 'Ảnh lớp học giao tiếp người lớn ADT 1 - ADT 4, giáo trình Market Leader Intermediate',
+    },
   ];
 
   return (
@@ -321,7 +345,7 @@ export default function MediaManager() {
                       <div className="text-center text-slate-400 p-3">
                         <ImageIcon className="w-8 h-8 mx-auto mb-1 opacity-50" />
                         <span className="text-[11px] font-semibold block">Chưa tải ảnh lên</span>
-                        <span className="text-[10px] text-slate-400 block">(Đang dùng ảnh mẫu mặc định)</span>
+                        <span className="text-[10px] text-slate-400 block">(Đang dùng giao diện chuẩn)</span>
                       </div>
                     )}
                   </div>

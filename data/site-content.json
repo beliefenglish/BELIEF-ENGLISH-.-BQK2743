@@ -20,92 +20,347 @@
   },
   "courses": [
     {
-      "id": "kindy",
-      "title": "Hệ Tiếng Anh Mầm Non (KINDY)",
-      "name": "HỆ KINDY (Tiếng Anh Mầm Non)",
-      "badge": "3 - 6 Tuổi",
-      "ageGroup": "3 - 6 tuổi",
-      "category": "kindy",
-      "targetAudience": "Trẻ mầm non 3 - 6 tuổi bắt đầu tiếp cận ngôn ngữ tự nhiên",
-      "level": "Pre-A1 Starters Foundation / Mầm non song ngữ",
-      "roadmap": "18 Khóa học • 288 buổi học toàn diện (Kindy 1, Kindy 2, Kindy 3)",
-      "duration": "36 tháng (Lộ trình chuẩn hóa theo từng năm phát triển)",
-      "schedule": "2 buổi / tuần • 75 phút / buổi (Ca Tối 2-4, 3-5 hoặc Cuối tuần)",
-      "textbook": "Cambridge Super Safari / Our Discovery Island & Flashcard BAC",
-      "description": "Thẩm thấu ngôn ngữ tự nhiên thông qua phương pháp phản xạ đa giác quan (Total Physical Response), âm nhạc và kể chuyện tương tác.",
-      "features": [
-        "Chuẩn phát âm Phonics bản ngữ từ sớm",
-        "Hình thành tư duy phản xạ không dịch nghĩa",
-        "Lớp học vui nhộn với màn hình tương tác thông minh",
-        "Giáo trình tiêu chuẩn Oxford Show and Tell"
+      "id": "starters",
+      "programName": "TIẾNG ANH THIẾU NHI (KID'S BOX)",
+      "title": "TIẾNG ANH THIẾU NHI (KID'S BOX) - STARTERS",
+      "name": "TIẾNG ANH THIẾU NHI (KID'S BOX) - STARTERS",
+      "badge": "5 - 8 Tuổi • 10 Khóa",
+      "ageGroup": "5 - 8 Tuổi • 10 Khóa",
+      "category": "kidsbox",
+      "targetAudience": "Học sinh thiếu nhi từ 5 - 8 tuổi xây dựng nền tảng tiếng Anh chuẩn Cambridge và chinh phục chứng chỉ Starters",
+      "description": "Học sinh thiếu nhi từ 5 - 8 tuổi xây dựng nền tảng tiếng Anh chuẩn Cambridge và chinh phục chứng chỉ Starters",
+      "level": "STARTERS (5-8 tuổi) • 10 khóa (STA 1 - STA 10)",
+      "courseCodes": "STA 1 → STA 10",
+      "roadmap": "10 Khóa học (STA 1 - STA 10) • 160 buổi học (16 buổi / khóa)",
+      "duration": "20 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "KID'S BOX STARTERS NEW GENERATION (SB/WB), KID'S BOX 1 NEW GENERATION (SB/WB), KID'S BOX 2 NEW GENERATION (SB/WB)",
+      "bookBreakdown": [
+        {
+          "courses": "STA 1 - STA 2",
+          "courseRange": "Mã số 1 - 2",
+          "studentBook": "KID'S BOX STARTERS NEW GENERATION (SB)",
+          "workbook": "KID'S BOX STARTERS NEW GENERATION (WB)"
+        },
+        {
+          "courses": "STA 3 - STA 6",
+          "courseRange": "Mã số 3 - 6",
+          "studentBook": "KID'S BOX 1 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 1 NEW GENERATION (WB)"
+        },
+        {
+          "courses": "STA 7 - STA 10",
+          "courseRange": "Mã số 7 - 10",
+          "studentBook": "KID'S BOX 2 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 2 NEW GENERATION (WB)"
+        }
       ],
       "highlights": [
-        "Chuẩn phát âm Phonics bản ngữ từ sớm",
-        "Hình thành tư duy phản xạ không dịch nghĩa",
-        "Lớp học vui nhộn với màn hình tương tác thông minh",
-        "Giáo trình tiêu chuẩn Oxford Show and Tell"
+        "Lộ trình 10 khóa bài bản từ STA 1 đến STA 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình chuẩn quốc tế Cambridge Kid's Box New Generation (Starters, Level 1 & Level 2 - SB & WB)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
       ],
-      "promotion": "Tặng ngay Balo & Bộ học cụ Belief English cao cấp; Học bổng lộ trình 6-12 tháng.",
-      "tuitionNote": "Học phí được tư vấn cá nhân hóa sau buổi Test năng lực 1-1."
+      "features": [
+        "Lộ trình 10 khóa bài bản từ STA 1 đến STA 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình chuẩn quốc tế Cambridge Kid's Box New Generation (Starters, Level 1 & Level 2 - SB & WB)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
     },
     {
-      "id": "ready",
-      "title": "Hệ Tiểu Học & Vá Mất Gốc (READY)",
-      "name": "HỆ READY (Vá Lỗ Hổng & Mất Gốc)",
-      "badge": "6 - 9 Tuổi",
-      "ageGroup": "6 - 9 tuổi (Học sinh mất gốc)",
-      "category": "ready",
-      "targetAudience": "Học sinh tiểu học mất gốc, sợ nói, hổng ngữ pháp hoặc phản xạ chậm",
-      "level": "Lấy lại căn bản tiền đề Starters / Pre-A1 vững chắc",
-      "roadmap": "6 Khóa học chuyên sâu • 96 buổi học • Xếp lớp theo năng lực thực tế",
-      "duration": "12 tháng (Có các chặng đánh giá tiến bộ định kỳ sau mỗi 12 buổi)",
-      "schedule": "2 buổi / tuần • 90 phút / buổi (Ca Tối T2-T4, T3-T5 hoặc Cuối tuần)",
-      "textbook": "Giáo trình chuẩn hóa Cambridge Kid’s Box / Everybody Up",
-      "description": "Xây dựng nền tảng ngữ pháp vững chắc, bồi đắp từ vựng chuyên sâu và lấy lại niềm đam mê học tập cho học sinh tiểu học.",
-      "features": [
-        "Lấy lại gốc căn bản chỉ sau 8 - 12 tuần",
-        "Bám sát khung chương trình Bộ GD&ĐT và Cambridge",
-        "Luyện phát âm chuẩn IPA và phản xạ giao tiếp",
-        "Cam kết theo sát 1 kèm 1 trong từng buổi học"
+      "id": "movers",
+      "programName": "TIẾNG ANH THIẾU NHI (KID'S BOX)",
+      "title": "TIẾNG ANH THIẾU NHI (KID'S BOX) - MOVERS",
+      "name": "TIẾNG ANH THIẾU NHI (KID'S BOX) - MOVERS",
+      "badge": "8 - 9 Tuổi • 6 Khóa",
+      "ageGroup": "8 - 9 Tuổi • 6 Khóa",
+      "category": "kidsbox",
+      "targetAudience": "Học sinh từ 8 - 9 tuổi đã hoàn thành cấp độ Starters hoặc đạt trình độ tương đương qua bài kiểm tra đầu vào",
+      "description": "Học sinh từ 8 - 9 tuổi đã hoàn thành cấp độ Starters hoặc đạt trình độ tương đương qua bài kiểm tra đầu vào",
+      "level": "MOVERS (8-9 tuổi) • 6 khóa (MOV 1 - MOV 6)",
+      "courseCodes": "MOV 1 → MOV 6",
+      "roadmap": "6 Khóa học (MOV 1 - MOV 6) • 96 buổi học (16 buổi / khóa)",
+      "duration": "12 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "KID'S BOX 3 NEW GENERATION (SB/WB), KID'S BOX 4 NEW GENERATION (SB) & KID'S BOX 3 NEW GENERATION (WB)",
+      "bookBreakdown": [
+        {
+          "courses": "MOV 1 - MOV 3",
+          "courseRange": "Mã số 1 - 3",
+          "studentBook": "KID'S BOX 3 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 3 NEW GENERATION (WB)"
+        },
+        {
+          "courses": "MOV 4 - MOV 6",
+          "courseRange": "Mã số 4 - 6",
+          "studentBook": "KID'S BOX 4 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 3 NEW GENERATION (WB)"
+        }
       ],
       "highlights": [
-        "Lấy lại gốc căn bản chỉ sau 8 - 12 tuần",
-        "Bám sát khung chương trình Bộ GD&ĐT và Cambridge",
-        "Luyện phát âm chuẩn IPA và phản xạ giao tiếp",
-        "Cam kết theo sát 1 kèm 1 trong từng buổi học"
+        "Lộ trình 6 khóa chuyên sâu từ MOV 1 đến MOV 6 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Kid's Box 3 & 4 New Generation phát triển toàn diện 4 kỹ năng Nghe - Nói - Đọc - Viết",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
       ],
-      "promotion": "Tặng áo thun đồng phục BELIS & bộ học cụ chuyên đề; Cam kết đầu ra bằng văn bản.",
-      "tuitionNote": "Học phí ưu đãi được tư vấn cá nhân hóa theo lộ trình."
+      "features": [
+        "Lộ trình 6 khóa chuyên sâu từ MOV 1 đến MOV 6 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Kid's Box 3 & 4 New Generation phát triển toàn diện 4 kỹ năng Nghe - Nói - Đọc - Viết",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
     },
     {
-      "id": "cambridge-ielts",
-      "title": "Hệ Chứng Chỉ Quốc Tế (Starters, Movers, Flyers, KET, PET & IELTS)",
-      "name": "CAMBRIDGE & IELTS (Chứng Chỉ Quốc Tế)",
-      "badge": "9 - 18 Tuổi",
-      "ageGroup": "9 - 18 tuổi & Người lớn",
-      "category": "cambridge",
-      "targetAudience": "Học sinh tiểu học, THCS và THPT đặt mục tiêu chứng chỉ Cambridge / IELTS",
-      "level": "A1 - B2+ / Band 4.5 - 7.5+",
-      "roadmap": "Lộ trình cá nhân hóa theo Band điểm mục tiêu",
-      "duration": "Lộ trình linh hoạt 6 - 18 tháng",
-      "schedule": "2 - 3 buổi / tuần • 90 - 120 phút / buổi",
-      "textbook": "Authentic Cambridge Practice Tests & Mindset for IELTS",
-      "description": "Luyện thi chuyên sâu 4 kỹ năng Nghe - Nói - Đọc - Viết theo tiêu chuẩn khảo thí đại học Cambridge và IDP/British Council.",
-      "features": [
-        "Chiến thuật làm bài thi đạt điểm tối đa",
-        "Ngân hàng đề thi thật cập nhật liên tục hàng quý",
-        "Chấm chữa bài Writing & Speaking chi tiết từng tiêu chí",
-        "Cam kết chuẩn đầu ra Starters, Movers, Flyers, PET, IELTS 7.0+"
+      "id": "flyers",
+      "programName": "TIẾNG ANH THIẾU NHI (KID'S BOX)",
+      "title": "TIẾNG ANH THIẾU NHI (KID'S BOX) - FLYERS",
+      "name": "TIẾNG ANH THIẾU NHI (KID'S BOX) - FLYERS",
+      "badge": "9 - 10 Tuổi • 6 Khóa",
+      "ageGroup": "9 - 10 Tuổi • 6 Khóa",
+      "category": "kidsbox",
+      "targetAudience": "Học sinh từ 9 - 10 tuổi hoàn thiện cấp độ cao nhất của hệ thiếu nhi Cambridge YLE (A2 Flyers)",
+      "description": "Học sinh từ 9 - 10 tuổi hoàn thiện cấp độ cao nhất của hệ thiếu nhi Cambridge YLE (A2 Flyers)",
+      "level": "FLYERS (9-10 tuổi) • 6 khóa (FLY 1 - FLY 6)",
+      "courseCodes": "FLY 1 → FLY 6",
+      "roadmap": "6 Khóa học (FLY 1 - FLY 6) • 96 buổi học (16 buổi / khóa)",
+      "duration": "12 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "KID'S BOX 5 NEW GENERATION (SB/WB), KID'S BOX 6 NEW GENERATION (SB/WB)",
+      "bookBreakdown": [
+        {
+          "courses": "FLY 1 - FLY 3",
+          "courseRange": "Mã số 1 - 3",
+          "studentBook": "KID'S BOX 5 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 5 NEW GENERATION (WB)"
+        },
+        {
+          "courses": "FLY 4 - FLY 6",
+          "courseRange": "Mã số 4 - 6",
+          "studentBook": "KID'S BOX 6 NEW GENERATION (SB)",
+          "workbook": "KID'S BOX 6 NEW GENERATION (WB)"
+        }
       ],
       "highlights": [
-        "Chiến thuật làm bài thi đạt điểm tối đa",
-        "Ngân hàng đề thi thật cập nhật liên tục hàng quý",
-        "Chấm chữa bài Writing & Speaking chi tiết từng tiêu chí",
-        "Cam kết chuẩn đầu ra Starters, Movers, Flyers, PET, IELTS 7.0+"
+        "Lộ trình 6 khóa từ FLY 1 đến FLY 6 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Kid's Box 5 & 6 New Generation (SB & WB) tạo đà vững chắc lên KET (A2)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
       ],
-      "promotion": "Tặng lệ phí thi thử Cambridge; Học bổng lên đến 20% khi đăng ký combo lộ trình.",
-      "tuitionNote": "Học phí bảo mật và được tư vấn cụ thể sau bài test 4 kỹ năng."
+      "features": [
+        "Lộ trình 6 khóa từ FLY 1 đến FLY 6 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Kid's Box 5 & 6 New Generation (SB & WB) tạo đà vững chắc lên KET (A2)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
+    },
+    {
+      "id": "ket",
+      "programName": "LUYỆN THI CHỨNG CHỈ KET (A2)",
+      "title": "LUYỆN THI CHỨNG CHỈ KET (A2)",
+      "name": "LUYỆN THI CHỨNG CHỈ KET (A2)",
+      "badge": "9 - 12 Tuổi • 10 Khóa",
+      "ageGroup": "9 - 12 Tuổi • 10 Khóa",
+      "category": "ket",
+      "targetAudience": "Học sinh từ 9 - 12 tuổi luyện thi chứng chỉ quốc tế Cambridge A2 Key for Schools (KET)",
+      "description": "Học sinh từ 9 - 12 tuổi luyện thi chứng chỉ quốc tế Cambridge A2 Key for Schools (KET)",
+      "level": "KET (9-12 tuổi) • 10 khóa (KET 1 - KET 10)",
+      "courseCodes": "KET 1 → KET 10",
+      "roadmap": "10 Khóa học (KET 1 - KET 10) • 160 buổi học (16 buổi / khóa)",
+      "duration": "20 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "COMPLETE KEY FOR SCHOOLS A2 (SB/WB), COMPACT KEY FOR SCHOOLS A2 (SB/WB)",
+      "bookBreakdown": [
+        {
+          "courses": "KET 1 - KET 5",
+          "courseRange": "Mã số 1 - 5",
+          "studentBook": "COMPLETE KEY FOR SCHOOLS A2 (SB)",
+          "workbook": "COMPLETE KEY FOR SCHOOLS A2 (WB)"
+        },
+        {
+          "courses": "KET 6 - KET 10",
+          "courseRange": "Mã số 6 - 10",
+          "studentBook": "COMPACT KEY FOR SCHOOLS A2 (SB)",
+          "workbook": "COMPACT KEY FOR SCHOOLS A2 (WB)"
+        }
+      ],
+      "highlights": [
+        "Lộ trình 10 khóa từ KET 1 đến KET 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Complete Key for Schools A2 (KET 1-5) & Compact Key for Schools A2 (KET 6-10)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "features": [
+        "Lộ trình 10 khóa từ KET 1 đến KET 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Complete Key for Schools A2 (KET 1-5) & Compact Key for Schools A2 (KET 6-10)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
+    },
+    {
+      "id": "pet",
+      "programName": "LUYỆN THI CHỨNG CHỈ PET (B1)",
+      "title": "LUYỆN THI CHỨNG CHỈ PET (B1)",
+      "name": "LUYỆN THI CHỨNG CHỈ PET (B1)",
+      "badge": "11 - 14 Tuổi • 10 Khóa",
+      "ageGroup": "11 - 14 Tuổi • 10 Khóa",
+      "category": "pet",
+      "targetAudience": "Học sinh từ 11 - 14 tuổi luyện thi chứng chỉ quốc tế Cambridge B1 Preliminary for Schools (PET)",
+      "description": "Học sinh từ 11 - 14 tuổi luyện thi chứng chỉ quốc tế Cambridge B1 Preliminary for Schools (PET)",
+      "level": "PET (11-14 tuổi) • 10 khóa (PET 1 - PET 10)",
+      "courseCodes": "PET 1 → PET 10",
+      "roadmap": "10 Khóa học (PET 1 - PET 10) • 160 buổi học (16 buổi / khóa)",
+      "duration": "20 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "COMPLETE PREMILINARY FOR SCHOOLS A2 (SB/WB), COMPACT PREMILINARY FOR SCHOOLS A2 (SB/WB)",
+      "bookBreakdown": [
+        {
+          "courses": "PET 1 - PET 5",
+          "courseRange": "Mã số 1 - 5",
+          "studentBook": "COMPLETE PREMILINARY FOR SCHOOLS A2 (SB)",
+          "workbook": "COMPLETE PREMILINARY FOR SCHOOLS A2 (WB)"
+        },
+        {
+          "courses": "PET 6 - PET 10",
+          "courseRange": "Mã số 6 - 10",
+          "studentBook": "COMPACT PREMILINARY FOR SCHOOLS A2 (SB)",
+          "workbook": "COMPACT PREMILINARY FOR SCHOOLS A2 (WB)"
+        }
+      ],
+      "highlights": [
+        "Lộ trình 10 khóa từ PET 1 đến PET 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Complete Preliminary for Schools (PET 1-5) & Compact Preliminary for Schools (PET 6-10)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "features": [
+        "Lộ trình 10 khóa từ PET 1 đến PET 10 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Complete Preliminary for Schools (PET 1-5) & Compact Preliminary for Schools (PET 6-10)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
+    },
+    {
+      "id": "ielts",
+      "programName": "LUYỆN THI IELTS",
+      "title": "LUYỆN THI IELTS (IEL 1 - IEL 12)",
+      "name": "LUYỆN THI IELTS (IEL 1 - IEL 12)",
+      "badge": "15+ Tuổi • 12 Khóa",
+      "ageGroup": "15+ Tuổi • 12 Khóa",
+      "category": "ielts",
+      "targetAudience": "Học viên từ 15+ tuổi luyện thi chứng chỉ học thuật quốc tế IELTS toàn diện 4 kỹ năng",
+      "description": "Học viên từ 15+ tuổi luyện thi chứng chỉ học thuật quốc tế IELTS toàn diện 4 kỹ năng",
+      "level": "IELTS (15+ tuổi) • 12 khóa (IEL 1 - IEL 12)",
+      "courseCodes": "IEL 1 → IEL 12",
+      "roadmap": "12 Khóa học (IEL 1 - IEL 12) • 192 buổi học (16 buổi / khóa)",
+      "duration": "24 tháng (2 tháng / khóa 16 buổi)",
+      "schedule": "16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 16,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "80,000 đ",
+      "tuitionPerCourse": "2,560,000 đ / khóa 16 buổi (2 tháng)",
+      "textbook": "MIND SET FOR IELTS 1 (SB/WB), MIND SET FOR IELTS 2 (SB/WB), MIND SET FOR IELTS 3 (SB/WB)",
+      "bookBreakdown": [
+        {
+          "courses": "IEL 1 - IEL 4",
+          "courseRange": "Mã số 1 - 4",
+          "studentBook": "MIND SET FOR IELTS 1 (SB)",
+          "workbook": "MIND SET FOR IELTS 1 (WB)"
+        },
+        {
+          "courses": "IEL 5 - IEL 8",
+          "courseRange": "Mã số 5 - 8",
+          "studentBook": "MIND SET FOR IELTS 2 (SB)",
+          "workbook": "MIND SET FOR IELTS 2 (WB)"
+        },
+        {
+          "courses": "IEL 9 - IEL 12",
+          "courseRange": "Mã số 9 - 12",
+          "studentBook": "MIND SET FOR IELTS 3 (SB)",
+          "workbook": "MIND SET FOR IELTS 3 (WB)"
+        }
+      ],
+      "highlights": [
+        "Lộ trình 12 khóa chuyên sâu từ IEL 1 đến IEL 12 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Mindset for IELTS 1 (IEL 1-4), Mindset for IELTS 2 (IEL 5-8) & Mindset for IELTS 3 (IEL 9-12)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "features": [
+        "Lộ trình 12 khóa chuyên sâu từ IEL 1 đến IEL 12 (16 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Cambridge Mindset for IELTS 1 (IEL 1-4), Mindset for IELTS 2 (IEL 5-8) & Mindset for IELTS 3 (IEL 9-12)",
+        "Học phí tiêu chuẩn: 80,000 đ/giờ • 2,560,000 đ/khóa 16 buổi (2 tháng)"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 80,000 đ/giờ • 2,560,000 đ / khóa 16 buổi (2 tháng). Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
+    },
+    {
+      "id": "adults",
+      "programName": "TIẾNG ANH GIAO TIẾP",
+      "title": "TIẾNG ANH GIAO TIẾP - ADULTS",
+      "name": "TIẾNG ANH GIAO TIẾP - ADULTS",
+      "badge": "18+ Tuổi • 4 Khóa",
+      "ageGroup": "18+ Tuổi • 4 Khóa",
+      "category": "adults",
+      "targetAudience": "Sinh viên và người đi làm (18+ tuổi) phát triển kỹ năng giao tiếp tiếng Anh thực tế & thương mại",
+      "description": "Sinh viên và người đi làm (18+ tuổi) phát triển kỹ năng giao tiếp tiếng Anh thực tế & thương mại",
+      "level": "ADULTS (18+ tuổi) • 4 khóa (ADT 1 - ADT 4)",
+      "courseCodes": "ADT 1 → ADT 4",
+      "roadmap": "4 Khóa học (ADT 1 - ADT 4) • 96 buổi học (24 buổi / khóa)",
+      "duration": "12 tháng (24 buổi / khóa)",
+      "schedule": "24 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa",
+      "sessionsPerCourse": 24,
+      "hoursPerSession": 2,
+      "testsPerCourse": 1,
+      "tuitionPerHour": "60,000 đ",
+      "tuitionPerCourse": "2,880,000 đ / khóa (24 buổi)",
+      "textbook": "MARKET LEADER - INTERMEDIATE (SB) & MARKET LEADER - INTERMEDIATE (WB)",
+      "bookBreakdown": [
+        {
+          "courses": "ADT 1 - ADT 4",
+          "courseRange": "Mã số 1 - 4",
+          "studentBook": "MARKET LEADER - INTERMEDIATE (SB)",
+          "workbook": "MARKET LEADER - INTERMEDIATE (WB)"
+        }
+      ],
+      "highlights": [
+        "Lộ trình 4 khóa từ ADT 1 đến ADT 4 (24 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Market Leader - Intermediate (SB & WB) ứng dụng giao tiếp công sở và thương mại quốc tế",
+        "Học phí ưu đãi người lớn: 60,000 đ/giờ • 2,880,000 đ/khóa 24 buổi"
+      ],
+      "features": [
+        "Lộ trình 4 khóa từ ADT 1 đến ADT 4 (24 buổi/khóa, 2 giờ/buổi, 1 bài kiểm tra/khóa)",
+        "Giáo trình Market Leader - Intermediate (SB & WB) ứng dụng giao tiếp công sở và thương mại quốc tế",
+        "Học phí ưu đãi người lớn: 60,000 đ/giờ • 2,880,000 đ/khóa 24 buổi"
+      ],
+      "promotion": "Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.",
+      "tuitionNote": "Học phí: 60,000 đ/giờ • 2,880,000 đ / khóa 24 buổi. Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
     }
   ],
-  "updatedAt": "2026-10-03T02:19:10.811Z"
+  "updatedAt": "2026-10-23T00:00:00.000Z"
 }

@@ -50,7 +50,7 @@ export default function LeadsManager() {
     phone: '',
     childName: '',
     childAge: '7',
-    program: 'kindy',
+    program: 'starters',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
     branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
     note: 'Đăng ký trực tiếp tại văn phòng cơ sở',
@@ -98,7 +98,7 @@ export default function LeadsManager() {
       phone: '',
       childName: '',
       childAge: '7',
-      program: 'kindy',
+      program: 'starters',
       preferredTime: 'Cuối tuần (Thứ 7 & CN)',
       branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
       note: 'Đăng ký trực tiếp tại văn phòng cơ sở',
@@ -511,15 +511,13 @@ export default function LeadsManager() {
                     onChange={e => setNewLeadForm({ ...newLeadForm, program: e.target.value })}
                     className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none"
                   >
-                    <option value="kindy">Hệ Kindy (3-6T)</option>
-                    <option value="ready">Hệ Ready (6-9T)</option>
-                    <option value="starters">Starters Pre-A1</option>
-                    <option value="movers">Movers A1</option>
-                    <option value="flyers">Flyers A2</option>
-                    <option value="ket">KET A2 Key</option>
-                    <option value="pet">PET B1 Preliminary</option>
-                    <option value="ielts">IELTS Academic</option>
-                    <option value="adults">Adults Giao tiếp</option>
+                    <option value="starters">Kid&apos;s Box - STARTERS (5-8T • 10 khóa)</option>
+                    <option value="movers">Kid&apos;s Box - MOVERS (8-9T • 6 khóa)</option>
+                    <option value="flyers">Kid&apos;s Box - FLYERS (9-10T • 6 khóa)</option>
+                    <option value="ket">Chứng chỉ KET A2 (9-12T • 10 khóa)</option>
+                    <option value="pet">Chứng chỉ PET B1 (11-14T • 10 khóa)</option>
+                    <option value="ielts">Luyện thi IELTS (15+ • 12 khóa)</option>
+                    <option value="adults">Giao tiếp ADULTS (18+ • 4 khóa)</option>
                   </select>
                 </div>
                 <div>

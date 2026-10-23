@@ -1,4 +1,5 @@
 import type { SiteContent } from '../types/content';
+import { COURSES_DATA } from '../src/data/coursesData';
 
 export const defaultContent: SiteContent = {
   brand: {
@@ -24,97 +25,12 @@ export const defaultContent: SiteContent = {
     control:
       'CONTROL (Kiểm soát): Đo lường tiến độ khoa học theo chuẩn Cambridge & CEFR quốc tế, cá nhân hóa lộ trình, đảm bảo chuẩn hóa phát âm và ngữ pháp chuẩn xác.',
   },
-  courses: [
-    {
-      id: 'kindy',
-      title: 'Hệ Tiếng Anh Mầm Non (KINDY)',
-      name: 'HỆ KINDY (Tiếng Anh Mầm Non)',
-      badge: '3 - 6 Tuổi',
-      ageGroup: '3 - 6 tuổi',
-      category: 'kindy',
-      targetAudience: 'Trẻ mầm non 3 - 6 tuổi bắt đầu tiếp cận ngôn ngữ tự nhiên',
-      level: 'Pre-A1 Starters Foundation / Mầm non song ngữ',
-      roadmap: '18 Khóa học • 288 buổi học toàn diện (Kindy 1, Kindy 2, Kindy 3)',
-      duration: '36 tháng (Lộ trình chuẩn hóa theo từng năm phát triển)',
-      schedule: '2 buổi / tuần • 75 phút / buổi (Ca Tối 2-4, 3-5 hoặc Cuối tuần)',
-      textbook: 'Cambridge Super Safari / Our Discovery Island & Flashcard BAC',
-      description:
-        'Thẩm thấu ngôn ngữ tự nhiên thông qua phương pháp phản xạ đa giác quan (Total Physical Response), âm nhạc và kể chuyện tương tác.',
-      features: [
-        'Chuẩn phát âm Phonics bản ngữ từ sớm',
-        'Hình thành tư duy phản xạ không dịch nghĩa',
-        'Lớp học vui nhộn với màn hình tương tác thông minh',
-        'Giáo trình tiêu chuẩn Oxford Show and Tell',
-      ],
-      highlights: [
-        'Chuẩn phát âm Phonics bản ngữ từ sớm',
-        'Hình thành tư duy phản xạ không dịch nghĩa',
-        'Lớp học vui nhộn với màn hình tương tác thông minh',
-        'Giáo trình tiêu chuẩn Oxford Show and Tell',
-      ],
-      promotion: 'Tặng ngay Balo & Bộ học cụ Belief English cao cấp; Học bổng lộ trình 6-12 tháng.',
-      tuitionNote: 'Học phí được tư vấn cá nhân hóa sau buổi Test năng lực 1-1.',
-    },
-    {
-      id: 'ready',
-      title: 'Hệ Tiểu Học & Vá Mất Gốc (READY)',
-      name: 'HỆ READY (Vá Lỗ Hổng & Mất Gốc)',
-      badge: '6 - 9 Tuổi',
-      ageGroup: '6 - 9 tuổi (Học sinh mất gốc)',
-      category: 'ready',
-      targetAudience: 'Học sinh tiểu học mất gốc, sợ nói, hổng ngữ pháp hoặc phản xạ chậm',
-      level: 'Lấy lại căn bản tiền đề Starters / Pre-A1 vững chắc',
-      roadmap: '6 Khóa học chuyên sâu • 96 buổi học • Xếp lớp theo năng lực thực tế',
-      duration: '12 tháng (Có các chặng đánh giá tiến bộ định kỳ sau mỗi 12 buổi)',
-      schedule: '2 buổi / tuần • 90 phút / buổi (Ca Tối T2-T4, T3-T5 hoặc Cuối tuần)',
-      textbook: 'Giáo trình chuẩn hóa Cambridge Kid’s Box / Everybody Up',
-      description:
-        'Xây dựng nền tảng ngữ pháp vững chắc, bồi đắp từ vựng chuyên sâu và lấy lại niềm đam mê học tập cho học sinh tiểu học.',
-      features: [
-        'Lấy lại gốc căn bản chỉ sau 8 - 12 tuần',
-        'Bám sát khung chương trình Bộ GD&ĐT và Cambridge',
-        'Luyện phát âm chuẩn IPA và phản xạ giao tiếp',
-        'Cam kết theo sát 1 kèm 1 trong từng buổi học',
-      ],
-      highlights: [
-        'Lấy lại gốc căn bản chỉ sau 8 - 12 tuần',
-        'Bám sát khung chương trình Bộ GD&ĐT và Cambridge',
-        'Luyện phát âm chuẩn IPA và phản xạ giao tiếp',
-        'Cam kết theo sát 1 kèm 1 trong từng buổi học',
-      ],
-      promotion: 'Tặng áo thun đồng phục BELIS & bộ học cụ chuyên đề; Cam kết đầu ra bằng văn bản.',
-      tuitionNote: 'Học phí ưu đãi được tư vấn cá nhân hóa theo lộ trình.',
-    },
-    {
-      id: 'cambridge-ielts',
-      title: 'Hệ Chứng Chỉ Quốc Tế (Starters, Movers, Flyers, KET, PET & IELTS)',
-      name: 'CAMBRIDGE & IELTS (Chứng Chỉ Quốc Tế)',
-      badge: '9 - 18 Tuổi',
-      ageGroup: '9 - 18 tuổi & Người lớn',
-      category: 'cambridge',
-      targetAudience: 'Học sinh tiểu học, THCS và THPT đặt mục tiêu chứng chỉ Cambridge / IELTS',
-      level: 'A1 - B2+ / Band 4.5 - 7.5+',
-      roadmap: 'Lộ trình cá nhân hóa theo Band điểm mục tiêu',
-      duration: 'Lộ trình linh hoạt 6 - 18 tháng',
-      schedule: '2 - 3 buổi / tuần • 90 - 120 phút / buổi',
-      textbook: 'Authentic Cambridge Practice Tests & Mindset for IELTS',
-      description:
-        'Luyện thi chuyên sâu 4 kỹ năng Nghe - Nói - Đọc - Viết theo tiêu chuẩn khảo thí đại học Cambridge và IDP/British Council.',
-      features: [
-        'Chiến thuật làm bài thi đạt điểm tối đa',
-        'Ngân hàng đề thi thật cập nhật liên tục hàng quý',
-        'Chấm chữa bài Writing & Speaking chi tiết từng tiêu chí',
-        'Cam kết chuẩn đầu ra Starters, Movers, Flyers, PET, IELTS 7.0+',
-      ],
-      highlights: [
-        'Chiến thuật làm bài thi đạt điểm tối đa',
-        'Ngân hàng đề thi thật cập nhật liên tục hàng quý',
-        'Chấm chữa bài Writing & Speaking chi tiết từng tiêu chí',
-        'Cam kết chuẩn đầu ra Starters, Movers, Flyers, PET, IELTS 7.0+',
-      ],
-      promotion: 'Tặng lệ phí thi thử Cambridge; Học bổng lên đến 20% khi đăng ký combo lộ trình.',
-      tuitionNote: 'Học phí bảo mật và được tư vấn cụ thể sau bài test 4 kỹ năng.',
-    },
-  ],
+  courses: COURSES_DATA.map(c => ({
+    ...c,
+    title: c.name,
+    ageGroup: c.badge,
+    description: c.targetAudience,
+    features: c.highlights,
+  })),
   updatedAt: new Date().toISOString(),
 };

@@ -80,7 +80,7 @@ function LandingPageContent() {
     phone: '',
     childName: '',
     childAge: '6',
-    program: 'kindy',
+    program: 'starters',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
     branch: siteSettings.address,
     note: '',
@@ -129,7 +129,7 @@ function LandingPageContent() {
       phone: '',
       childName: '',
       childAge: '6',
-      program: 'kindy',
+      program: 'starters',
       preferredTime: 'Cuối tuần (Thứ 7 & CN)',
       branch: siteSettings.address,
       note: '',
@@ -1060,16 +1060,16 @@ function LandingPageContent() {
               </h3>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Hệ Kindy (3-6 tuổi)</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Tiếng Anh Thiếu Nhi (Kid&apos;s Box: Starters, Movers, Flyers)</a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Hệ Ready (Vá mất gốc 6-9 tuổi)</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Luyện thi Chứng chỉ KET (A2) &amp; PET (B1)</a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Cambridge Starters, Movers, Flyers</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Luyện thi IELTS (15+ • 12 khóa)</a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Luyện thi IELTS & IELTS Expert</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Tiếng Anh Giao tiếp - Adults (18+ • 4 khóa)</a>
                 </li>
                 <li>
                   <a href="#thu-vien" className="hover:text-white transition-colors font-semibold text-orange-300">Thư viện sách & Tài liệu số</a>
@@ -1194,17 +1194,13 @@ function LandingPageContent() {
                       onChange={e => setFormData({ ...formData, program: e.target.value })}
                       className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                     >
-                      <option value="kindy">Hệ KINDY (3 - 6 tuổi: Thẩm thấu tự nhiên)</option>
-                      <option value="ready">Hệ READY (6 - 9 tuổi: Vá lỗ hổng cho trẻ mất gốc)</option>
-                      <option value="starters">Cambridge Starters (7 - 8 tuổi: Pre-A1)</option>
-                      <option value="movers">Cambridge Movers (8 - 10 tuổi: A1)</option>
-                      <option value="flyers">Cambridge Flyers (10 - 12 tuổi: A2)</option>
-                      <option value="ket">Cambridge KET (11 - 14 tuổi: A2 Key)</option>
-                      <option value="pet">Cambridge PET (13 - 16 tuổi: B1 Preliminary)</option>
-                      <option value="pre-ielts">Hệ Pre-IELTS (Xây nền 4.0 - 5.0+)</option>
-                      <option value="ielts">Hệ IELTS Chuyên sâu (Target 5.5 - 6.5+)</option>
-                      <option value="ielts-expert">Hệ IELTS Expert (Target 7.0 - 8.0+)</option>
-                      <option value="adults">Hệ Adults (Giao tiếp & Người đi làm)</option>
+                      <option value="starters">Tiếng Anh Thiếu Nhi (Kid&apos;s Box) - STARTERS (5-8 tuổi • 10 khóa)</option>
+                      <option value="movers">Tiếng Anh Thiếu Nhi (Kid&apos;s Box) - MOVERS (8-9 tuổi • 6 khóa)</option>
+                      <option value="flyers">Tiếng Anh Thiếu Nhi (Kid&apos;s Box) - FLYERS (9-10 tuổi • 6 khóa)</option>
+                      <option value="ket">Luyện Thi Chứng Chỉ KET (A2) (9-12 tuổi • 10 khóa)</option>
+                      <option value="pet">Luyện Thi Chứng Chỉ PET (B1) (11-14 tuổi • 10 khóa)</option>
+                      <option value="ielts">Luyện Thi IELTS (15+ tuổi • 12 khóa)</option>
+                      <option value="adults">Tiếng Anh Giao Tiếp - ADULTS (18+ tuổi • 4 khóa)</option>
                     </select>
                   </div>
 

@@ -5,7 +5,6 @@ import {
   TrendingUp,
   Award,
   Sparkles,
-  PhoneCall,
   MessageSquare,
   ArrowRight,
   ShieldCheck,
@@ -36,7 +35,7 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
     {
       step: '03',
       title: 'Hoạch Định Lộ Trình & Xếp Lớp',
-      desc: 'Tư vấn lộ trình học tối ưu theo từng giai đoạn, xếp lớp theo đúng độ tuổi và năng lực thực tế để học viên tiếp thu hiệu quả nhất.',
+      desc: 'Tư vấn lộ trình học tối ưu theo từng giai đoạn (STA, MOV, FLY, KET, PET, IEL, ADT), xếp lớp đúng độ tuổi và năng lực thực tế.',
       icon: TrendingUp,
       color: 'bg-blue-50 text-[#1e3a8a]',
     },
@@ -49,48 +48,63 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
     },
     {
       step: '05',
-      title: 'Cam Kết Đầu Ra & Bàn Giao Học Liệu',
-      desc: 'Ký kết văn bản cam kết chuẩn đầu ra rõ ràng, kích hoạt tài khoản EdTech và trao tặng bộ đồng phục, balo Belief English chính hãng.',
+      title: 'Áp Dụng Ưu Đãi & Bàn Giao Học Liệu',
+      desc: 'Áp dụng mã ưu đãi học phí (MOI, GT, 4KH, 6KH, CV2C, OLD) và tặng SGK (mã BOOK khi đăng ký từ 6 khóa), cam kết chuẩn đầu ra.',
       icon: Award,
       color: 'bg-emerald-50 text-emerald-600',
     },
   ];
 
+  // Bảng Ma Trận đồng bộ 100% với BẢNG TƯ VẤN HỌC PHÍ - TÀI LIỆU TƯ VẤN
   const levelsMatrix = [
     {
-      ageGroup: '3 - 6 Tuổi (Mầm non)',
-      program: 'Hệ Kindy (18 Khóa)',
-      cefr: 'Pre-A1 Foundation',
-      focus: 'Thẩm thấu phản xạ tự nhiên, phát âm Phonics chuẩn bản ngữ, phản xạ vận động TPR.',
-      tag: 'Giai đoạn vàng',
+      ageGroup: '5 - 8 Tuổi (Thiếu nhi)',
+      program: "Tiếng Anh Thiếu Nhi (Kid's Box) - STARTERS (10 khóa: STA 1 - STA 10)",
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: "Giáo trình: Kid's Box Starters New Generation (STA 1-2), Kid's Box 1 (STA 3-6) & Kid's Box 2 (STA 7-10) (SB & WB).",
+      tag: '160 Buổi • 20 Tháng',
     },
     {
-      ageGroup: '6 - 9 Tuổi (Tiểu học)',
-      program: 'Hệ Ready (6 Khóa)',
-      cefr: 'Chuẩn bị Starters',
-      focus: 'Cứu cánh mất gốc, vá lỗ hổng ngữ pháp, phát triển vốn từ vựng nền tảng, lấy lại điểm số trường lớp.',
-      tag: 'Bứt phá mất gốc',
+      ageGroup: '8 - 9 Tuổi (Thiếu nhi)',
+      program: "Tiếng Anh Thiếu Nhi (Kid's Box) - MOVERS (6 khóa: MOV 1 - MOV 6)",
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: "Giáo trình: Kid's Box 3 New Generation (MOV 1-3) & Kid's Box 4 New Generation (MOV 4-6) (SB & WB).",
+      tag: '96 Buổi • 12 Tháng',
     },
     {
-      ageGroup: '7 - 12 Tuổi (Tiểu học & THCS)',
-      program: 'Cambridge Starters, Movers, Flyers',
-      cefr: 'Pre-A1 -> A1 -> A2',
-      focus: 'Chinh phục 12-15 khiên Cambridge, phát triển đồng đều 4 kỹ năng, tự tin giao tiếp và thuyết trình.',
-      tag: 'Chuẩn quốc tế',
+      ageGroup: '9 - 10 Tuổi (Thiếu nhi)',
+      program: "Tiếng Anh Thiếu Nhi (Kid's Box) - FLYERS (6 khóa: FLY 1 - FLY 6)",
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: "Giáo trình: Kid's Box 5 New Generation (FLY 1-3) & Kid's Box 6 New Generation (FLY 4-6) (SB & WB).",
+      tag: '96 Buổi • 12 Tháng',
     },
     {
-      ageGroup: '11 - 16 Tuổi (THCS & THPT)',
-      program: 'Cambridge KET, PET & Pre-IELTS',
-      cefr: 'A2 -> B1 (Target 4.0 - 5.0+)',
-      focus: 'Tiếng Anh học thuật tổng quát, tư duy phản biện, luyện viết luận ngắn và làm quen định dạng đề thi IELTS.',
-      tag: 'Miễn thi tốt nghiệp',
+      ageGroup: '9 - 12 Tuổi (THCS)',
+      program: 'Luyện Thi Chứng Chỉ KET (A2) (10 khóa: KET 1 - KET 10)',
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: 'Giáo trình: Complete Key for Schools A2 (KET 1-5) & Compact Key for Schools A2 (KET 6-10) (SB & WB).',
+      tag: '160 Buổi • 20 Tháng',
     },
     {
-      ageGroup: '15 - 18+ Tuổi & Người lớn',
-      program: 'IELTS Academic, IELTS Expert, Adults',
-      cefr: 'B2 -> C1 (Band 5.5 - 8.0+)',
-      focus: 'Xét tuyển thẳng Đại học top đầu, săn học bổng du học toàn phần, giao tiếp thương mại và nâng tầm sự nghiệp.',
-      tag: 'Thành công tương lai',
+      ageGroup: '11 - 14 Tuổi (THCS)',
+      program: 'Luyện Thi Chứng Chỉ PET (B1) (10 khóa: PET 1 - PET 10)',
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: 'Giáo trình: Complete Preliminary for Schools (PET 1-5) & Compact Preliminary for Schools (PET 6-10) (SB & WB).',
+      tag: '160 Buổi • 20 Tháng',
+    },
+    {
+      ageGroup: '15+ Tuổi (THPT & SV)',
+      program: 'Luyện Thi IELTS (12 khóa: IEL 1 - IEL 12)',
+      cefr: '16 buổi/khóa • 2 giờ/buổi • 80,000đ/giờ (2,560,000đ/khóa)',
+      focus: 'Giáo trình: Mindset for IELTS 1 (IEL 1-4), Mindset for IELTS 2 (IEL 5-8) & Mindset for IELTS 3 (IEL 9-12) (SB & WB).',
+      tag: '192 Buổi • 24 Tháng',
+    },
+    {
+      ageGroup: '18+ Tuổi (Người lớn)',
+      program: 'Tiếng Anh Giao Tiếp - ADULTS (4 khóa: ADT 1 - ADT 4)',
+      cefr: '24 buổi/khóa • 2 giờ/buổi • 60,000đ/giờ (2,880,000đ/khóa)',
+      focus: 'Giáo trình: Market Leader - Intermediate (SB & WB). Thực hành giao tiếp thương mại và công sở.',
+      tag: '96 Buổi • 4 Khóa',
     },
   ];
 
@@ -109,7 +123,7 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
             Bảng Tư Vấn & Quy Trình Đào Tạo BELIS
           </h2>
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-            Mỗi học viên tại Belief English đều được thiết kế kế hoạch học tập độc bản, đảm bảo đúng điểm xuất phát và đạt chuẩn cam kết đầu ra nhanh nhất.
+            Mỗi học viên tại Belief English đều được thiết kế kế hoạch học tập chuẩn hóa theo Bảng Tư Vấn Học Phí, đảm bảo đúng điểm xuất phát và đạt chuẩn cam kết đầu ra.
           </p>
         </div>
 
@@ -148,10 +162,10 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-[#1e3a8a]">
-                Bảng Ma Trận Phân Bổ Cấp Độ & Lộ Trình Theo Lứa Tuổi
+                Bảng Ma Trận Phân Bổ Cấp Độ, Học Phí & Giáo Trình Theo Lứa Tuổi
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Đối chiếu tương thích với Khung tham chiếu Châu Âu (CEFR) & Hệ thống Cambridge/IELTS
+                Đồng bộ chính xác theo Bảng Tư Vấn Học Phí - Tài Liệu Tư Vấn Belief English (1 bài kiểm tra định kỳ / khóa)
               </p>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold shrink-0 self-start sm:self-auto">
@@ -161,14 +175,14 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[640px]">
+            <table className="w-full text-left border-collapse min-w-[720px]">
               <thead>
                 <tr className="border-b border-slate-200 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="py-3 px-4">Độ Tuổi Học Viên</th>
-                  <th className="py-3 px-4">Chương Trình Đào Tạo</th>
-                  <th className="py-3 px-4">Trình Độ Chuẩn (CEFR / Band)</th>
-                  <th className="py-3 px-4">Mục Tiêu Trọng Tâm</th>
-                  <th className="py-3 px-4 text-center">Đặc Quyền</th>
+                  <th className="py-3 px-4">Độ Tuổi & Cấp Độ</th>
+                  <th className="py-3 px-4">Chương Trình & Mã Khóa</th>
+                  <th className="py-3 px-4">Thời Lượng & Học Phí</th>
+                  <th className="py-3 px-4">Giáo Trình Chính Thức (SB & WB)</th>
+                  <th className="py-3 px-4 text-center">Tổng Lộ Trình</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200/70 text-xs">
@@ -183,11 +197,11 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
                     <td className="py-4 px-4 font-semibold text-orange-600 whitespace-nowrap">
                       {row.cefr}
                     </td>
-                    <td className="py-4 px-4 text-slate-600 max-w-xs">
+                    <td className="py-4 px-4 text-slate-600 max-w-sm">
                       {row.focus}
                     </td>
                     <td className="py-4 px-4 text-center">
-                      <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-extrabold bg-blue-100 text-[#1e3a8a]">
+                      <span className="inline-block px-2.5 py-1 rounded-md text-[11px] font-extrabold bg-blue-100 text-[#1e3a8a] whitespace-nowrap">
                         {row.tag}
                       </span>
                     </td>
@@ -238,7 +252,7 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
             </a>
             <button
               onClick={onOpenConsultation}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm bg-orange-500 hover:bg-orange-600 text-white shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 cursor-pointer"
             >
               <span>Đăng Ký Test 1-1 Miễn Phí</span>
               <ArrowRight className="w-4 h-4" />

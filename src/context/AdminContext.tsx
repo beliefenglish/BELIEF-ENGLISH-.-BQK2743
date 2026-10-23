@@ -132,8 +132,9 @@ const DEFAULT_SETTINGS: SiteSettings = {
   email: 'beliefenglish.edu@gmail.com',
   workHours: 'Thứ Hai - Chủ Nhật (8h00 - 21h30)',
   showAnnouncement: true,
-  announcementText: '🔥 Khai giảng Khóa Mới Tháng Này: Tặng 100% Phí Kiểm Tra Năng Lực 1-1 + Balo Belief English cao cấp!',
-  announcementLinkText: 'Đăng Ký Ngay',
+  announcementText:
+    '🔥 Ưu Đãi Học Bổng Đặc Biệt (Mã MOI / GT): Giảm 50% học phí khóa đầu tiên + Giảm thêm 5% (4KH, 6KH, CV2C, OLD) + Tặng SGK (BOOK)!',
+  announcementLinkText: 'Nhận Ưu Đãi Ngay',
   companyName: 'Công Ty Cổ Phần Đào Tạo Quốc Tế BELIS GROUP',
 };
 
@@ -142,8 +143,7 @@ const DEFAULT_MEDIA: SiteMedia = {
   customLogoWhite: '',
   customLogoCircle: '',
   categoryImages: {
-    kindy: '',
-    ready: '',
+    kidsbox: '',
     starters: '',
     movers: '',
     flyers: '',
@@ -160,11 +160,11 @@ const INITIAL_LEADS: LeadItem[] = [
     parentName: 'Nguyễn Thị Thu Hà',
     phone: '0912.456.789',
     childName: 'Bé Gia Hưng',
-    childAge: '5',
-    program: 'kindy',
+    childAge: '6',
+    program: 'starters',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
     branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
-    note: 'Bé chưa học tiếng Anh bao giờ, muốn cho bé làm quen thẩm thấu tự nhiên.',
+    note: 'Đăng ký lộ trình Starters (STA 1 - STA 10), áp dụng mã MOI giảm 50% khóa đầu.',
     createdAt: '2026-10-02 08:30',
     status: 'new',
     adminNotes: 'Đang xếp lịch kiểm tra với cô Mai vào 9h sáng Thứ 7.',
@@ -175,10 +175,10 @@ const INITIAL_LEADS: LeadItem[] = [
     phone: '0988.123.456',
     childName: 'Trần Bảo Anh',
     childAge: '8',
-    program: 'ready',
+    program: 'movers',
     preferredTime: 'Tối các ngày trong tuần (18h-20h)',
     branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
-    note: 'Bé học lớp 3 bị mất gốc ngữ pháp trên lớp, sợ nói tiếng Anh.',
+    note: 'Bé 8 tuổi muốn học hệ Movers (MOV 1 - MOV 6), đăng ký 4 khóa áp dụng mã 4KH.',
     createdAt: '2026-10-01 19:15',
     status: 'scheduled',
     adminNotes: 'Đã hẹn lịch test năng lực 19h00 Tối thứ 5. Phụ huynh rất quan tâm cam kết đầu ra.',
@@ -188,14 +188,14 @@ const INITIAL_LEADS: LeadItem[] = [
     parentName: 'Lê Hoàng Yến',
     phone: '0903.987.654',
     childName: 'Lê Minh Quân',
-    childAge: '11',
-    program: 'flyers',
+    childAge: '10',
+    program: 'ket',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
     branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
-    note: 'Mục tiêu thi Cambridge Flyers 14 khiên để xét tuyển vào trường chuyên.',
+    note: 'Mục tiêu luyện thi chứng chỉ KET (A2) (KET 1 - KET 10).',
     createdAt: '2026-10-01 14:05',
     status: 'enrolled',
-    adminNotes: 'Học viên đã test đạt 12/15 điểm Starters, đã xếp lớp Flyers A2 ca Thứ 7.',
+    adminNotes: 'Học viên đã đăng ký combo 6 khóa (6KH + tặng sách BOOK), đã xếp lớp KET 1.',
   },
   {
     id: 'lead-4',
@@ -206,163 +206,158 @@ const INITIAL_LEADS: LeadItem[] = [
     program: 'ielts',
     preferredTime: 'Tối các ngày trong tuần (18h-20h)',
     branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
-    note: 'Cần đạt IELTS 6.5+ để xét tuyển Đại học Ngoại Thương.',
+    note: 'Cần học lộ trình IELTS (IEL 1 - IEL 12) giáo trình Mindset for IELTS 1-3.',
     createdAt: '2026-09-30 16:40',
     status: 'called',
-    adminNotes: 'Đã gọi tư vấn, gửi lộ trình 8 tháng. Phụ huynh hẹn cuối tuần đưa con qua cơ sở.',
+    adminNotes: 'Đã gọi tư vấn bảng học phí 2,560,000đ/khóa 16 buổi. Phụ huynh hẹn cuối tuần qua cơ sở.',
   },
 ];
 
 const INITIAL_FOLDERS: LibraryFolder[] = [
   {
-    id: 'folder-kindy',
-    name: 'Thư Mục Sách Hệ Kindy (3 - 6 Tuổi)',
-    description: 'Giáo trình Cambridge Super Safari, Our Discovery Island & Tài liệu Phonics tương tác',
-    category: 'kindy',
+    id: 'folder-kidsbox',
+    name: "Thư Mục Tiếng Anh Thiếu Nhi - Kid's Box (Starters, Movers, Flyers)",
+    description:
+      "Giáo trình Kid's Box Starters, 1, 2, 3, 4, 5, 6 New Generation (SB & WB) chuẩn Cambridge",
+    category: 'kidsbox',
     createdAt: '2026-10-01',
   },
   {
-    id: 'folder-ready',
-    name: 'Thư Mục Sách Hệ Ready (Vá Lỗ Hổng 6 - 9 Tuổi)',
-    description: 'Giáo trình Kid’s Box, Everybody Up & Sổ tay củng cố ngữ pháp tiểu học',
-    category: 'ready',
-    createdAt: '2026-10-01',
-  },
-  {
-    id: 'folder-cambridge',
-    name: 'Thư Mục Cambridge Quốc Tế (Starters, Movers, Flyers)',
-    description: 'Đề thi thật Cambridge YLE Authentic Tests & Sách rèn luyện 4 kỹ năng Storyfun',
-    category: 'cambridge',
+    id: 'folder-ket-pet',
+    name: 'Thư Mục Luyện Thi Chứng Chỉ KET (A2) & PET (B1)',
+    description:
+      'Giáo trình Complete & Compact Key for Schools A2 (SB/WB), Complete & Compact Preliminary for Schools (SB/WB)',
+    category: 'ket',
     createdAt: '2026-10-01',
   },
   {
     id: 'folder-ielts',
-    name: 'Thư Mục Cambridge KET, PET & Luyện Thi IELTS',
-    description: 'Mindset for IELTS Level 1-3, Cambridge IELTS Official Tests & Complete Key/PET',
+    name: 'Thư Mục Luyện Thi IELTS (15+ Tuổi)',
+    description: 'Giáo trình Mindset for IELTS 1, 2, 3 (SB & WB) cho lộ trình IEL 1 - IEL 12',
     category: 'ielts',
+    createdAt: '2026-10-01',
+  },
+  {
+    id: 'folder-adults',
+    name: 'Thư Mục Tiếng Anh Giao Tiếp - Adults (18+ Tuổi)',
+    description: 'Giáo trình Market Leader - Intermediate (SB & WB) cho lộ trình ADT 1 - ADT 4',
+    category: 'adults',
     createdAt: '2026-10-01',
   },
 ];
 
 const INITIAL_BOOKS: LibraryBookItem[] = [
-  // Kindy Folder
+  // Kid's Box Folder
   {
     id: 'book-1',
-    folderId: 'folder-kindy',
-    title: 'Cambridge Super Safari 1 - Student’s Book & Songs (Bản Đẹp PDF)',
-    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/super-safari',
-    description: 'Sách giáo khoa hình ảnh sinh động giúp trẻ mầm non làm quen với âm điệu Phonics bản ngữ.',
+    folderId: 'folder-kidsbox',
+    title: "KID'S BOX STARTERS, 1 & 2 NEW GENERATION (SB & WB) - Lộ trình STA 1 - STA 10",
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/kids-box-new-generation',
+    description:
+      "Trọn bộ Sách Bài Học (SB) và Sách Bài Tập (WB) cho trình độ Starters (5-8 tuổi • 10 khóa STA 1 - STA 10).",
     fileType: 'drive',
-    badge: 'Cambridge Official',
+    badge: 'Starters (5-8T)',
     updatedAt: '2026-10-01',
   },
   {
     id: 'book-2',
-    folderId: 'folder-kindy',
-    title: 'Our Discovery Island Level 1 - Interactive Pupil’s Book',
-    url: 'https://www.pearson.com/en-us.html',
-    description: 'Giáo trình khám phá ngôn ngữ qua câu chuyện phiêu lưu và bài hát vui nhộn.',
-    fileType: 'pdf',
-    badge: 'Giáo Trình Chuẩn',
+    folderId: 'folder-kidsbox',
+    title: "KID'S BOX 3 & 4 NEW GENERATION (SB & WB) - Lộ trình MOV 1 - MOV 6",
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/kids-box-new-generation',
+    description:
+      "Sách giáo trình chuẩn Cambridge cho trình độ Movers (8-9 tuổi • 6 khóa MOV 1 - MOV 6).",
+    fileType: 'drive',
+    badge: 'Movers (8-9T)',
     updatedAt: '2026-10-01',
   },
   {
     id: 'book-3',
-    folderId: 'folder-kindy',
-    title: 'Bộ Flashcard Từ Vựng & Vận Động TPR Độc Quyền Belief English',
-    url: 'https://zalo.me/0377757877',
-    description: 'Học liệu thẻ từ vựng trực quan chuẩn phương pháp BAC giúp kích hoạt phản xạ cơ thể.',
-    fileType: 'ebook',
-    badge: 'Độc Quyền BAC',
+    folderId: 'folder-kidsbox',
+    title: "KID'S BOX 5 & 6 NEW GENERATION (SB & WB) - Lộ trình FLY 1 - FLY 6",
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/kids-box-new-generation',
+    description:
+      "Sách giáo trình chuẩn Cambridge cho trình độ Flyers (9-10 tuổi • 6 khóa FLY 1 - FLY 6).",
+    fileType: 'drive',
+    badge: 'Flyers (9-10T)',
     updatedAt: '2026-10-01',
   },
 
-  // Ready Folder
+  // KET & PET Folder
   {
     id: 'book-4',
-    folderId: 'folder-ready',
-    title: 'Kid’s Box Updated Second Edition - Level 1 & 2 (Student’s Book)',
-    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/kids-box-updated-2nd-edition',
-    description: 'Giáo trình cốt lõi giúp các em học sinh tiểu học lấy lại căn bản ngữ âm và cấu trúc câu.',
-    fileType: 'drive',
-    badge: 'Cambridge Chuẩn',
+    folderId: 'folder-ket-pet',
+    title: 'COMPLETE & COMPACT KEY FOR SCHOOLS A2 (SB & WB) - Lộ trình KET 1 - KET 10',
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/secondary/complete-key-schools-2nd-edition',
+    description:
+      'Complete Key for Schools A2 (KET 1-5) & Compact Key for Schools A2 (KET 6-10) cho học sinh 9-12 tuổi.',
+    fileType: 'pdf',
+    badge: 'KET A2 (9-12T)',
     updatedAt: '2026-10-01',
   },
   {
     id: 'book-5',
-    folderId: 'folder-ready',
-    title: 'Cambridge Everybody Up Starter - Phonics & Grammar Boost',
-    url: 'https://elt.oup.com',
-    description: 'Sách bổ trợ xây nền tảng tự tin giao tiếp và chuẩn bị tốt cho các bài kiểm tra tại trường.',
+    folderId: 'folder-ket-pet',
+    title: 'COMPLETE & COMPACT PREMILINARY FOR SCHOOLS (SB & WB) - Lộ trình PET 1 - PET 10',
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/secondary/complete-preliminary-schools-2nd-edition',
+    description:
+      'Complete Preliminary for Schools (PET 1-5) & Compact Preliminary for Schools (PET 6-10) cho học sinh 11-14 tuổi.',
     fileType: 'pdf',
-    badge: 'Oxford Edition',
+    badge: 'PET B1 (11-14T)',
     updatedAt: '2026-10-01',
   },
 
-  // Cambridge Folder
+  // IELTS Folder
   {
     id: 'book-6',
-    folderId: 'folder-cambridge',
-    title: 'Cambridge Starters Authentic Practice Tests (Đề Thi Thật 15 Khiên)',
-    url: 'https://www.cambridgeenglish.org/exams-and-tests/starters/',
-    description: 'Trọn bộ đề thi thử mô phỏng 100% format phòng thi Cambridge quốc tế cho cấp độ Pre-A1.',
+    folderId: 'folder-ielts',
+    title: 'MIND SET FOR IELTS 1, 2 & 3 (SB & WB) - Lộ trình IEL 1 - IEL 12',
+    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/cambridge-english-exams-ielts/mindset-ielts',
+    description:
+      'Mindset for IELTS 1 (IEL 1-4), Mindset for IELTS 2 (IEL 5-8) & Mindset for IELTS 3 (IEL 9-12) cho học viên 15+ tuổi.',
     fileType: 'drive',
-    badge: 'Đề Thi Thật',
-    updatedAt: '2026-10-01',
-  },
-  {
-    id: 'book-7',
-    folderId: 'folder-cambridge',
-    title: 'Storyfun for Starters & Fun for Movers (Full Ebook + Audio)',
-    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/primary/storyfun-starters-movers-and-flyers-2nd-edition',
-    description: 'Tài liệu rèn luyện kỹ năng nghe nói qua tranh truyện cực kỳ thu hút cho lứa tuổi 7 - 10.',
-    fileType: 'audio',
-    badge: 'Luyện 4 Kỹ Năng',
-    updatedAt: '2026-10-01',
-  },
-  {
-    id: 'book-8',
-    folderId: 'folder-cambridge',
-    title: 'Cambridge Flyers Authentic Examination Papers (Đề Thi A2 Flyers)',
-    url: 'https://www.cambridgeenglish.org/exams-and-tests/flyers/',
-    description: 'Tuyển tập đề thi A2 Flyers giúp học sinh chuẩn bị chuyển cấp vào trường chuyên chất lượng cao.',
-    fileType: 'pdf',
-    badge: 'Tuyển Sinh Chuyên',
+    badge: 'IELTS (15+)',
     updatedAt: '2026-10-01',
   },
 
-  // IELTS & KET PET Folder
+  // Adults Folder
   {
-    id: 'book-9',
-    folderId: 'folder-ielts',
-    title: 'Mindset for IELTS Level 1 (Foundation Band 4.0 - 5.5)',
-    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/cambridge-english-exams-ielts/mindset-ielts',
-    description: 'Giáo trình chính thống từ Cambridge University Press trang bị tư duy làm bài thi học thuật.',
-    fileType: 'drive',
-    badge: 'IELTS Cambridge',
-    updatedAt: '2026-10-01',
-  },
-  {
-    id: 'book-10',
-    folderId: 'folder-ielts',
-    title: 'Cambridge IELTS Official Practice Tests 15 - 19 (Academic Edition)',
-    url: 'https://www.cambridgeenglish.org/exams-and-tests/ielts/',
-    description: 'Bộ sách luyện đề thực chiến chuẩn nhất cho học sinh đặt mục tiêu 6.5 - 7.5+ xét tuyển Đại học.',
-    fileType: 'drive',
-    badge: 'Bản Đẹp 2024-2025',
-    updatedAt: '2026-10-01',
-  },
-  {
-    id: 'book-11',
-    folderId: 'folder-ielts',
-    title: 'Cambridge Complete Key for Schools (A2 Key) & Preliminary (B1 PET)',
-    url: 'https://www.cambridge.org/vn/cambridgeenglish/catalog/secondary/complete-key-schools-2nd-edition',
-    description: 'Giáo trình toàn diện giúp học sinh THCS lấy chứng chỉ quốc tế và miễn thi tốt nghiệp môn Anh văn.',
-    fileType: 'pdf',
-    badge: 'Miễn Thi Tốt Nghiệp',
+    id: 'book-7',
+    folderId: 'folder-adults',
+    title: 'MARKET LEADER - INTERMEDIATE (SB & WB) - Lộ trình ADT 1 - ADT 4',
+    url: 'https://www.pearson.com/english/catalogue/business-english/market-leader.html',
+    description:
+      'Giáo trình tiếng Anh giao tiếp và thương mại quốc tế dành cho người lớn (18+ tuổi • 4 khóa ADT 1 - ADT 4).',
+    fileType: 'ebook',
+    badge: 'Adults (18+)',
     updatedAt: '2026-10-01',
   },
 ];
+
+const COURSES_STORAGE_KEY = 'belis_courses_v2_tltv';
+
+// Detect legacy course lists (from before BẢNG TƯ VẤN HỌC PHÍ update) so they automatically upgrade
+function isLegacyCoursesList(list: any[]): boolean {
+  if (!Array.isArray(list) || list.length === 0) return true;
+  const ids = list.map(c => c?.id);
+  if (
+    ids.includes('kindy') ||
+    ids.includes('ready') ||
+    ids.includes('cambridge-ielts') ||
+    ids.includes('pre-ielts') ||
+    ids.includes('ielts-expert')
+  ) {
+    return true;
+  }
+  const starters = list.find(c => c?.id === 'starters');
+  if (
+    starters &&
+    typeof starters.roadmap === 'string' &&
+    starters.roadmap.includes('4 Khóa')
+  ) {
+    return true;
+  }
+  return false;
+}
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
@@ -444,36 +439,62 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     return { success: true };
   };
 
-  // Helper to normalize course objects from any source (cloud, localStorage, backup)
+  // Helper to normalize course objects from any source while preserving detailed BẢNG TƯ VẤN HỌC PHÍ metadata
   const normalizeCourseItem = (item: any): CourseItem => {
+    const baseMatch = COURSES_DATA.find(c => c.id === item?.id);
     return {
       id: item?.id || `course-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      name: item?.name || item?.title || 'Khóa học',
-      badge: item?.badge || item?.ageGroup || 'Chuẩn Quốc Tế',
-      category: (item?.category as CourseItem['category']) || 'cambridge',
-      targetAudience: item?.targetAudience || item?.description || '',
-      level: item?.level || 'Chuẩn Khảo Thí Cambridge',
-      roadmap: item?.roadmap || item?.duration || 'Lộ trình chuẩn hóa',
-      duration: item?.duration || '8 - 12 tháng',
-      schedule: item?.schedule || '2 buổi / tuần • 90 phút / buổi',
-      textbook: item?.textbook || 'Giáo trình Cambridge / Oxford',
+      programName: item?.programName || baseMatch?.programName || 'CHƯƠNG TRÌNH ĐÀO TẠO BELIS',
+      name: item?.name || item?.title || baseMatch?.name || 'Khóa học',
+      badge: item?.badge || item?.ageGroup || baseMatch?.badge || 'Chuẩn Quốc Tế',
+      category: (item?.category as CourseItem['category']) || baseMatch?.category || 'kidsbox',
+      targetAudience: item?.targetAudience || item?.description || baseMatch?.targetAudience || '',
+      level: item?.level || baseMatch?.level || 'Chuẩn Khảo Thí Cambridge',
+      courseCodes: item?.courseCodes || baseMatch?.courseCodes,
+      roadmap: item?.roadmap || item?.duration || baseMatch?.roadmap || 'Lộ trình chuẩn hóa',
+      duration: item?.duration || baseMatch?.duration || '12 - 24 tháng',
+      schedule:
+        item?.schedule ||
+        baseMatch?.schedule ||
+        '16 buổi / khóa • 2 giờ dạy / buổi • 1 bài kiểm tra / khóa',
+      sessionsPerCourse: item?.sessionsPerCourse ?? baseMatch?.sessionsPerCourse ?? 16,
+      hoursPerSession: item?.hoursPerSession ?? baseMatch?.hoursPerSession ?? 2,
+      testsPerCourse: item?.testsPerCourse ?? baseMatch?.testsPerCourse ?? 1,
+      tuitionPerHour: item?.tuitionPerHour || baseMatch?.tuitionPerHour || '80,000 đ',
+      tuitionPerCourse:
+        item?.tuitionPerCourse ||
+        baseMatch?.tuitionPerCourse ||
+        '2,560,000 đ / khóa 16 buổi (2 tháng)',
+      textbook: item?.textbook || baseMatch?.textbook || 'Giáo trình Cambridge Official',
+      bookBreakdown: Array.isArray(item?.bookBreakdown)
+        ? item.bookBreakdown
+        : baseMatch?.bookBreakdown,
+      subCourses: Array.isArray(item?.subCourses)
+        ? item.subCourses
+        : baseMatch?.subCourses,
       highlights: Array.isArray(item?.highlights)
         ? item.highlights
         : Array.isArray(item?.features)
         ? item.features
-        : ['Chương trình chuẩn hóa quốc tế', 'Giáo viên giàu kinh nghiệm'],
-      promotion: item?.promotion || 'Ưu đãi đăng ký sớm lên đến 15%',
-      tuitionNote: item?.tuitionNote || 'Học phí được tư vấn cá nhân hóa.',
+        : baseMatch?.highlights || ['Chương trình chuẩn hóa quốc tế', 'Cam kết chuẩn đầu ra'],
+      promotion:
+        item?.promotion ||
+        baseMatch?.promotion ||
+        'Mã MOI / GT: Giảm 50% học phí khóa đầu tiên; Mã 4KH / 6KH / CV2C / OLD: Giảm thêm 5% học phí; Mã BOOK: Tặng SGK khi đăng ký từ 6 khóa.',
+      tuitionNote:
+        item?.tuitionNote ||
+        baseMatch?.tuitionNote ||
+        'Học phí & ưu đãi học bổng áp dụng theo Bảng Tư Vấn Học Phí.',
     };
   };
 
   // Courses state
   const [courses, setCourses] = useState<CourseItem[]>(() => {
     try {
-      const saved = localStorage.getItem('belis_courses');
+      const saved = localStorage.getItem(COURSES_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed) && parsed.length > 0 && !isLegacyCoursesList(parsed)) {
           return parsed.map((item: any) => normalizeCourseItem(item));
         }
       }
@@ -528,7 +549,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   // Library folders state
   const [libraryFolders, setLibraryFolders] = useState<LibraryFolder[]>(() => {
     try {
-      const saved = localStorage.getItem('belis_folders');
+      const saved = localStorage.getItem('belis_folders_v2');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -542,7 +563,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   // Library books state
   const [libraryBooks, setLibraryBooks] = useState<LibraryBookItem[]>(() => {
     try {
-      const saved = localStorage.getItem('belis_books');
+      const saved = localStorage.getItem('belis_books_v2');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -556,7 +577,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   // Save to localStorage when state changes
   useEffect(() => {
     try {
-      localStorage.setItem('belis_courses', JSON.stringify(courses));
+      localStorage.setItem(COURSES_STORAGE_KEY, JSON.stringify(courses));
     } catch (e) {
       console.warn(e);
     }
@@ -588,7 +609,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('belis_folders', JSON.stringify(libraryFolders));
+      localStorage.setItem('belis_folders_v2', JSON.stringify(libraryFolders));
     } catch (e) {
       console.warn(e);
     }
@@ -596,7 +617,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('belis_books', JSON.stringify(libraryBooks));
+      localStorage.setItem('belis_books_v2', JSON.stringify(libraryBooks));
     } catch (e) {
       console.warn(e);
     }
@@ -619,6 +640,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const resetCourses = () => {
     setCourses(COURSES_DATA);
+    localStorage.removeItem(COURSES_STORAGE_KEY);
     localStorage.removeItem('belis_courses');
   };
 
@@ -761,8 +783,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const resetLibrary = () => {
     setLibraryFolders(INITIAL_FOLDERS);
     setLibraryBooks(INITIAL_BOOKS);
-    localStorage.removeItem('belis_folders');
-    localStorage.removeItem('belis_books');
+    localStorage.removeItem('belis_folders_v2');
+    localStorage.removeItem('belis_books_v2');
   };
 
   // Cloud Sync & Storage States
@@ -818,7 +840,13 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         const res = await fetch(`/api/content?ts=${Date.now()}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          if (data && data.courses && Array.isArray(data.courses) && data.courses.length > 0) {
+          if (
+            data &&
+            data.courses &&
+            Array.isArray(data.courses) &&
+            data.courses.length > 0 &&
+            !isLegacyCoursesList(data.courses)
+          ) {
             setCourses(data.courses.map(normalizeCourseItem));
           }
           if (data && data.settings) {
@@ -887,7 +915,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       try {
         localStorage.setItem('belis_site_content_backup', JSON.stringify(payload));
         if (Array.isArray(courses)) {
-          localStorage.setItem('belis_courses', JSON.stringify(courses));
+          localStorage.setItem(COURSES_STORAGE_KEY, JSON.stringify(courses));
         }
       } catch (localSaveErr) {
         console.warn('LocalStorage backup note:', localSaveErr);
@@ -969,9 +997,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // EXPORT COURSES TO CSV
   const exportCoursesCSV = () => {
-    const headers = ['Mã Khóa', 'Tên Khóa Học', 'Phân Loại', 'Huy Hiệu', 'Trình Độ', 'Lộ Trình', 'Thời Lượng', 'Lịch Học', 'Giáo Trình', 'Ưu Đãi'];
+    const headers = ['Mã Khóa', 'Chương Trình', 'Tên Khóa Học', 'Phân Loại', 'Huy Hiệu', 'Trình Độ', 'Lộ Trình', 'Thời Lượng', 'Lịch Học', 'Học Phí/Giờ', 'Học Phí Khóa', 'Giáo Trình', 'Ưu Đãi'];
     const rows = (courses || []).map(c => [
       c?.id || '',
+      `"${(c?.programName || '').replace(/"/g, '""')}"`,
       `"${(c?.name || '').replace(/"/g, '""')}"`,
       c?.category || '',
       `"${c?.badge || ''}"`,
@@ -979,6 +1008,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       `"${c?.roadmap || ''}"`,
       `"${c?.duration || ''}"`,
       `"${c?.schedule || ''}"`,
+      `"${c?.tuitionPerHour || ''}"`,
+      `"${c?.tuitionPerCourse || ''}"`,
       `"${(c?.textbook || '').replace(/"/g, '""')}"`,
       `"${(c?.promotion || '').replace(/"/g, '""')}"`,
     ]);
@@ -1041,9 +1072,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       }
       if (jsonData.libraryBooks && Array.isArray(jsonData.libraryBooks)) {
         setLibraryBooks(jsonData.libraryBooks);
-      }
-      if (jsonData.leads && Array.isArray(jsonData.leads)) {
-        setLeads(jsonData.leads);
       }
       if (jsonData.leads && Array.isArray(jsonData.leads)) {
         setLeads(jsonData.leads);
@@ -1128,4 +1156,3 @@ export function useAdmin() {
   }
   return context;
 }
-

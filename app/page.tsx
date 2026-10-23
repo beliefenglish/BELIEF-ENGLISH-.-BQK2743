@@ -485,11 +485,11 @@ export default async function HomePage() {
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Chương Trình Học</h4>
               <ul className="space-y-2 text-xs text-slate-400">
-                <li>• Tiếng Anh Mầm Non (Kindy 3-6T)</li>
-                <li>• Tiểu học & Vá mất gốc (Ready 6-9T)</li>
-                <li>• Cambridge Starters, Movers, Flyers</li>
-                <li>• Luyện thi KET, PET & IELTS 7.0+</li>
-                <li>• Tiếng Anh Giao tiếp Người lớn</li>
+                <li>• Tiếng Anh Thiếu Nhi (Kid&apos;s Box: Starters, Movers, Flyers)</li>
+                <li>• Luyện thi Chứng chỉ KET (A2) (9-12T • 10 khóa)</li>
+                <li>• Luyện thi Chứng chỉ PET (B1) (11-14T • 10 khóa)</li>
+                <li>• Luyện thi IELTS (15+ • 12 khóa)</li>
+                <li>• Tiếng Anh Giao tiếp - Adults (18+ • 4 khóa)</li>
               </ul>
             </div>
 
