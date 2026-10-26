@@ -1092,7 +1092,7 @@ function LandingPageContent() {
             <div className="lg:col-span-5 space-y-4">
               <BeliefLogo variant="white" size="lg" />
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md pt-2">
-                <strong className="text-white">Trung tâm {MANDATORY_CENTER_NAME}</strong> (Belief English) trực thuộc <strong className="text-orange-400">{MANDATORY_COMPANY_NAME}</strong>. Tiên phong tri thức, hậu vận thành công với phương pháp đào tạo độc quyền BAC.
+                <strong className="text-white">Trung tâm {MANDATORY_CENTER_NAME}</strong> trực thuộc <strong className="text-orange-400">{MANDATORY_COMPANY_NAME}</strong>. Tiên phong tri thức, hậu vận thành công với phương pháp đào tạo độc quyền BAC.
               </p>
               <div className="text-xs text-slate-300 space-y-1.5 pt-2 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
                 <div>

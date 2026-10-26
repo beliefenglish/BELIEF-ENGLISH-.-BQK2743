@@ -179,7 +179,7 @@ export default function BeliefLogo({
               isWhite ? 'text-white' : 'text-[#1e3a8a]'
             }`}
           >
-            Belief English
+            Ngoại ngữ Niềm Tin Đông Tăng Long
           </span>
           <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
         </div>
@@ -189,7 +189,7 @@ export default function BeliefLogo({
               isWhite ? 'text-orange-300' : 'text-orange-600'
             }`}
           >
-            Ngoại ngữ Niềm Tin Đông Tăng Long
+            BELIS GROUP • MST: 0318836212
           </span>
         )}
       </div>

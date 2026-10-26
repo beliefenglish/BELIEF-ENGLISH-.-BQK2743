@@ -130,7 +130,7 @@ export default function VercelStorageManager() {
               <Cloud className="w-3.5 h-3.5" />
               <span>Vercel Storage & Backup Center</span>
             </span>
-            <span className="text-xs text-slate-400">• Độc quyền Belief English</span>
+            <span className="text-xs text-slate-400">• Độc quyền Ngoại ngữ Niềm Tin Đông Tăng Long</span>
           </div>
           <h3 className="text-xl font-black text-[#1e3a8a]">
             Trung Tâm Lưu Trữ Vercel & Xuất/Nhập Dữ Liệu
@@ -501,7 +501,7 @@ export default function VercelStorageManager() {
         <div className="border-2 border-dashed border-slate-200 hover:border-blue-400 bg-slate-50/60 rounded-2xl p-6 text-center transition-colors">
           <FileJson className="w-10 h-10 text-slate-400 mx-auto mb-2" />
           <p className="text-xs font-bold text-slate-700 mb-1">
-            Chọn tệp sao lưu JSON của Belief English để nạp lại
+            Chọn tệp sao lưu JSON của Ngoại ngữ Niềm Tin Đông Tăng Long để nạp lại
           </p>
           <p className="text-[11px] text-slate-400 mb-4">
             Định dạng tệp: <code className="bg-slate-200 px-1 py-0.5 rounded text-slate-800">.json</code>

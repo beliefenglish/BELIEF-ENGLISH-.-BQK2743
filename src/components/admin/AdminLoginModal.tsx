@@ -59,7 +59,7 @@ export default function AdminLoginModal({ onBackToSite }: AdminLoginModalProps) 
               Đăng Nhập Quản Trị Viên
             </h2>
             <p className="text-xs text-slate-500 mt-1">
-              Bảng điều khiển hệ thống Belief English • BELIS GROUP
+              Bảng điều khiển hệ thống Ngoại ngữ Niềm Tin Đông Tăng Long • BELIS GROUP
             </p>
           </div>
 

@@ -35,7 +35,7 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    const systemInstruction = `You are "Belief AI Speaking Coach", a warm, friendly, and motivating English speaking tutor for students at "Trung tâm Ngoại ngữ Niềm Tin - Belief English (Member of BELIS GROUP)".
+    const systemInstruction = `You are "Belief AI Speaking Coach", a warm, friendly, and motivating English speaking tutor for students at "Trung tâm Ngoại ngữ Niềm Tin Đông Tăng Long (CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP - MST: 0318836212)".
 Target Student Level: ${level || 'Cambridge Young Learners'}
 Current Speaking Topic: ${topic || 'General Daily English Conversation'}
 

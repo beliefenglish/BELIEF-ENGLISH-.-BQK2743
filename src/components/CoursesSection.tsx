@@ -152,7 +152,7 @@ export default function CoursesSection({ onSelectCourse }: CoursesSectionProps) 
             if (!course) return null;
             const courseId = course?.id || `course-${cIdx}`;
             const programName = course?.programName || 'CHƯƠNG TRÌNH ĐÀO TẠO BELIS';
-            const courseName = course?.name || (course as any)?.title || 'Khóa Học Belief English';
+            const courseName = course?.name || (course as any)?.title || 'Khóa Học Ngoại ngữ Niềm Tin Đông Tăng Long';
             const courseBadge = course?.badge || (course as any)?.ageGroup || 'Chuẩn Quốc Tế';
             const courseLevel = course?.level || 'Đạt Chuẩn Đầu Ra';
             const courseRoadmap = course?.roadmap || 'Lộ trình chuẩn hóa';
@@ -490,7 +490,7 @@ export default function CoursesSection({ onSelectCourse }: CoursesSectionProps) 
                 Bảng Mã Ưu Đãi Học Phí & Quà Tặng Giáo Trình (BẢNG TƯ VẤN HỌC PHÍ)
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Áp dụng chính thức cho học viên đăng ký lộ trình tại Trung tâm Ngoại ngữ Niềm Tin - Belief English
+                Áp dụng chính thức cho học viên đăng ký lộ trình tại Trung tâm Ngoại ngữ Niềm Tin Đông Tăng Long
               </p>
             </div>
             <div className="flex items-center gap-2 self-start sm:self-auto">

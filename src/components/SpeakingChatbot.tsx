@@ -265,7 +265,7 @@ export default function SpeakingChatbot() {
       const fallbackReplies = [
         `Excellent speaking! 🌟 You did great expressing yourself. 💡 Tip: Try saying "I really enjoy practicing English because it is fun." What is your favorite animal or hobby?`,
         `Good pronunciation! 👏 You are speaking with wonderful confidence. Let's keep going: Can you tell me what you had for breakfast today?`,
-        `Awesome job! 🚀 Belief English is proud of your progress. Could you describe your best friend to me in 2 sentences?`,
+        `Awesome job! 🚀 Ngoại ngữ Niềm Tin Đông Tăng Long is proud of your progress. Could you describe your best friend to me in 2 sentences?`,
       ];
       const randomReply = fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
 

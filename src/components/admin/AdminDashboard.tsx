@@ -393,7 +393,7 @@ export default function AdminDashboard() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500">
-        <p>Hệ thống Quản trị Nội bộ • Trung tâm Ngoại ngữ Niềm Tin - Belief English (BELIS GROUP)</p>
+        <p>Hệ thống Quản trị Nội bộ • Trung tâm Ngoại ngữ Niềm Tin Đông Tăng Long (CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP - MST: 0318836212)</p>
       </footer>
     </div>
   );

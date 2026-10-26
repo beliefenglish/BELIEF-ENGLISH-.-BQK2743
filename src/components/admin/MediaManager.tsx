@@ -176,7 +176,7 @@ export default function MediaManager() {
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
         <div className="flex items-center gap-2 text-sm font-black text-[#1e3a8a] border-b border-slate-100 pb-3">
           <Sparkles className="w-4 h-4 text-orange-500" />
-          <span>Hệ Thống Logo Thương Hiệu Belief English</span>
+          <span>Hệ Thống Logo Thương Hiệu Ngoại ngữ Niềm Tin Đông Tăng Long</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -84,7 +84,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <span className="text-base sm:text-lg font-black tracking-tight text-[#1e3a8a] block leading-none">
-                      BELIEF ENGLISH
+                      Ngoại ngữ Niềm Tin Đông Tăng Long
                     </span>
                     <span className="text-[10px] uppercase font-bold text-orange-600 tracking-wider">
                       {centerName}
