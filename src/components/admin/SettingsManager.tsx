@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Settings,
   Phone,
   MessageCircle,
   MapPin,
@@ -11,6 +10,9 @@ import {
   RotateCcw,
   CheckCircle,
   Loader2,
+  Building2,
+  Landmark,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -33,10 +35,10 @@ export default function SettingsManager() {
       <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-lg font-black text-[#1e3a8a]">
-            Cài Đặt Website & Kênh Liên Hệ
+            Cài Đặt Pháp Lý (Nghị Định 81/2021/NĐ-CP) & Kênh Liên Hệ
           </h3>
           <p className="text-xs text-slate-500">
-            Cập nhật hotline, Zalo, địa chỉ cơ sở, email và thanh thông báo ưu đãi hiển thị trên trang.
+            Quản lý tên công ty, mã số thuế, tên trung tâm, email nhận thông báo đăng ký phụ huynh và thông tin liên hệ.
           </p>
         </div>
 
@@ -44,7 +46,7 @@ export default function SettingsManager() {
           <button
             type="button"
             onClick={() => {
-              if (window.confirm('Khôi phục toàn bộ cài đặt về mặc định?')) {
+              if (window.confirm('Khôi phục toàn bộ cài đặt về mặc định chuẩn Nghị định 81/2021/NĐ-CP?')) {
                 resetSiteSettings();
                 setFormState(siteSettings);
               }
@@ -70,16 +72,111 @@ export default function SettingsManager() {
       {showSavedToast && (
         <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-in fade-in">
           <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Đã lưu cài đặt website thành công và đồng bộ lên hệ thống Vercel Cloud!</span>
+          <span>Đã lưu cài đặt pháp lý và website thành công!</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Mandatory Legal & Brand Info Card */}
+        <div className="bg-white p-6 rounded-2xl border-2 border-blue-200 shadow-xs space-y-4">
+          <div className="flex items-center gap-2 text-sm font-black text-[#1e3a8a] border-b border-slate-100 pb-3">
+            <Building2 className="w-4 h-4 text-orange-500" />
+            <span>Thông Tin Pháp Nhân & Công Khai Theo Nghị Định 81/2021/NĐ-CP</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                TÊN CÔNG TY (Đơn vị chủ quản) *
+              </label>
+              <input
+                type="text"
+                required
+                value={formState.companyName}
+                onChange={e => setFormState({ ...formState, companyName: e.target.value })}
+                className="w-full px-3 py-2 text-xs font-bold text-[#1e3a8a] border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                MÃ SỐ THUẾ DOANH NGHIỆP *
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={formState.taxCode}
+                  onChange={e => setFormState({ ...formState, taxCode: e.target.value })}
+                  className="w-full pl-9 pr-3 py-2 text-xs font-mono font-bold text-orange-600 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                />
+                <Landmark className="w-3.5 h-3.5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                TÊN TRUNG TÂM ĐƯỢC CẤP PHÉP *
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  required
+                  value={formState.centerName}
+                  onChange={e => setFormState({ ...formState, centerName: e.target.value })}
+                  className="w-full pl-9 pr-3 py-2 text-xs font-bold text-slate-900 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 absolute left-3 top-1/2 -translate-y-1/2" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Mã Trung Tâm (Hệ thống Sở GD&ĐT TP.HCM)
+              </label>
+              <input
+                type="text"
+                value={formState.centerCode}
+                onChange={e => setFormState({ ...formState, centerCode: e.target.value })}
+                className="w-full px-3 py-2 text-xs font-mono font-bold text-slate-700 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Quyết định cho phép thành lập
+              </label>
+              <input
+                type="text"
+                value={formState.establishmentDecision}
+                onChange={e => setFormState({ ...formState, establishmentDecision: e.target.value })}
+                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1">
+                Giám đốc Trung tâm & Quyết định công nhận
+              </label>
+              <input
+                type="text"
+                value={formState.directorName}
+                onChange={e => setFormState({ ...formState, directorName: e.target.value })}
+                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Contact Info Card */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center gap-2 text-sm font-bold text-[#1e3a8a] border-b border-slate-100 pb-3">
             <Phone className="w-4 h-4 text-orange-500" />
-            <span>Kênh Liên Hệ Trực Tiếp (Hotline & Zalo)</span>
+            <span>Kênh Liên Hệ Trực Tiếp & Email Nhận Đăng Ký Phụ Huynh</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -135,23 +232,27 @@ export default function SettingsManager() {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Email nhận liên hệ
+                Email nhận thông báo khi phụ huynh điền form *
               </label>
               <div className="relative">
                 <input
                   type="email"
+                  required
                   value={formState.email}
                   onChange={e => setFormState({ ...formState, email: e.target.value })}
-                  className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
+                  className="w-full pl-9 pr-3 py-2 text-xs font-bold text-[#1e3a8a] border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
                 />
-                <Mail className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-3.5 h-3.5 text-orange-500 absolute left-3 top-1/2 -translate-y-1/2" />
               </div>
+              <p className="text-[10px] text-emerald-600 font-semibold mt-1">
+                ✓ Mọi lượt đăng ký của phụ huynh sẽ tự động gửi thông báo về: beliefenglish.edu@gmail.com
+              </p>
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Địa chỉ cơ sở chính
+              Địa chỉ cơ sở hoạt động chính thức
             </label>
             <div className="relative">
               <input
@@ -218,24 +319,6 @@ export default function SettingsManager() {
               type="text"
               value={formState.announcementLinkText}
               onChange={e => setFormState({ ...formState, announcementLinkText: e.target.value })}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
-            />
-          </div>
-        </div>
-
-        {/* Legal & Brand Info */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-          <div className="text-sm font-bold text-[#1e3a8a] border-b border-slate-100 pb-3">
-            Pháp Nhân & Thương Hiệu
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Tên pháp nhân công ty
-            </label>
-            <input
-              type="text"
-              value={formState.companyName}
-              onChange={e => setFormState({ ...formState, companyName: e.target.value })}
               className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]"
             />
           </div>

@@ -3,9 +3,16 @@ import { COURSES_DATA } from '../src/data/coursesData';
 
 export const defaultContent: SiteContent = {
   brand: {
-    name: 'Belief English - BELIS GROUP',
+    name: 'Ngoại ngữ Niềm Tin Đông Tăng Long',
+    companyName: 'CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP',
+    taxCode: '0318836212',
+    centerCode: 'TTNN.TH-1897',
+    establishmentDecision: 'Số 2046/QĐ-SGDĐT ngày 10/11/2025 của Sở GD&ĐT TP.HCM',
+    directorDecision: 'Số 2105/QĐ-SGDĐT ngày 12/11/2025 của Sở GD&ĐT TP.HCM',
+    directorName: 'Nguyễn Đồng Trưởng',
+    legalRepresentative: 'Nguyễn Quốc Khánh',
     logoUrl: '',
-    address: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Thủ Đức, TP. HCM',
+    address: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
     phone: '0377.757.877',
     email: 'beliefenglish.edu@gmail.com',
     facebookUrl: 'https://facebook.com/beliefenglish',
@@ -13,7 +20,7 @@ export const defaultContent: SiteContent = {
   hero: {
     headline: 'Tiên phong tri thức, hậu vận thành công',
     subtitle:
-      'Hệ sinh thái học tập toàn diện khơi dậy niềm tin và phát triển thế hệ tương lai với phương pháp độc quyền BAC và chuẩn khảo thí quốc tế Cambridge.',
+      'Trung tâm Ngoại ngữ Niềm Tin Đông Tăng Long (Mã TT: TTNN.TH-1897) trực thuộc CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP (MST: 0318836212) — Tiên phong phương pháp độc quyền BAC và chuẩn khảo thí quốc tế Cambridge.',
     ctaText: 'Đăng ký Test Năng Lực',
     secondaryCtaText: 'Khám Phá Lộ Trình',
   },

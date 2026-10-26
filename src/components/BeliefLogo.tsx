@@ -16,7 +16,6 @@ export default function BeliefLogo({
   showSubtitle = true,
   customSrc,
 }: LogoProps) {
-  // Try getting uploaded logo from AdminContext if not explicitly passed
   let uploadedLogo = customSrc;
   try {
     const admin = useAdmin();
@@ -30,10 +29,9 @@ export default function BeliefLogo({
       }
     }
   } catch {
-    // If used outside provider, fallback gracefully
+    // Fallback gracefully outside provider
   }
 
-  // Dimensions
   const iconSizes = {
     sm: 'w-8 h-8',
     md: 'w-10 h-10',
@@ -50,19 +48,18 @@ export default function BeliefLogo({
 
   const subtitleSizes = {
     sm: 'text-[9px]',
-    md: 'text-[11px]',
+    md: 'text-[10px]',
     lg: 'text-xs',
     xl: 'text-sm',
   };
 
-  // Circular Badge version
   if (variant === 'circle') {
     return (
       <div className={`relative inline-flex items-center justify-center shrink-0 ${className}`}>
         {uploadedLogo ? (
           <img
             src={uploadedLogo}
-            alt="Belief English Emblem"
+            alt="Ngoại ngữ Niềm Tin Đông Tăng Long"
             className={`${iconSizes[size] || 'w-14 h-14'} rounded-full object-contain p-0.5 bg-white shadow-md border-2 border-orange-500`}
           />
         ) : (
@@ -72,11 +69,8 @@ export default function BeliefLogo({
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Outer Ring */}
             <circle cx="100" cy="100" r="95" stroke="#1e3a8a" strokeWidth="6" fill="#ffffff" />
             <circle cx="100" cy="100" r="87" stroke="#f97316" strokeWidth="2" strokeDasharray="4 3" />
-            
-            {/* Inner Badge Shield */}
             <path
               d="M100 28 L152 48 V104 C152 140 100 172 100 172 C100 172 48 140 48 104 V48 Z"
               fill="#1e3a8a"
@@ -85,10 +79,7 @@ export default function BeliefLogo({
               d="M100 34 L146 52 V102 C146 134 100 164 100 164 C100 164 54 134 54 102 V52 Z"
               fill="#172554"
             />
-
-            {/* Golden Torch & Star & Letter B */}
             <path d="M100 52 L105 64 H117 L107 72 L111 84 L100 76 L89 84 L93 72 L83 64 H95 Z" fill="#fbbf24" />
-            
             <path
               d="M82 92 H106 C113 92 118 96 118 102 C118 106 115 109 110 111 C117 113 120 118 120 124 C120 132 113 137 104 137 H82 V92 Z"
               fill="#ffffff"
@@ -101,7 +92,6 @@ export default function BeliefLogo({
               d="M92 118 H106 C109 118 111 120 111 124 C111 128 109 130 106 130 H92 V118 Z"
               fill="#1e3a8a"
             />
-            
             <path d="M60 115 Q68 145 100 162" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
             <path d="M140 115 Q132 145 100 162" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
           </svg>
@@ -110,7 +100,6 @@ export default function BeliefLogo({
     );
   }
 
-  // Icon only
   if (variant === 'icon-only') {
     return (
       <div
@@ -149,7 +138,6 @@ export default function BeliefLogo({
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      {/* Brand Icon Badge */}
       <div
         className={`${iconSizes[size]} shrink-0 rounded-2xl ${
           isWhite
@@ -184,7 +172,6 @@ export default function BeliefLogo({
         )}
       </div>
 
-      {/* Typography */}
       <div className="flex flex-col text-left">
         <div className="flex items-center gap-1.5">
           <span
@@ -202,7 +189,7 @@ export default function BeliefLogo({
               isWhite ? 'text-orange-300' : 'text-orange-600'
             }`}
           >
-            Member of BELIS GROUP
+            Ngoại ngữ Niềm Tin Đông Tăng Long
           </span>
         )}
       </div>

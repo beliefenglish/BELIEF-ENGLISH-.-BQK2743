@@ -1,3 +1,11 @@
+/**
+ * Chuẩn hóa thông tin công khai theo Nghị định số 81/2021/NĐ-CP & Thông tư 09/2024/TT-BGDĐT:
+ * - TÊN CÔNG TY: CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP
+ * - MÃ SỐ THUẾ: 0318836212
+ * - TÊN TRUNG TÂM: Ngoại ngữ Niềm Tin Đông Tăng Long (Mã trung tâm: TTNN.TH-1897)
+ * - QUYẾT ĐỊNH THÀNH LẬP: Số 2046/QĐ-SGDĐT ngày 10/11/2025
+ * - EMAIL NHẬN THÔNG BÁO ĐĂNG KÝ PHỤ HUYNH: beliefenglish.edu@gmail.com
+ */
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Brain,
@@ -30,18 +38,31 @@ import {
   Send,
   LayoutDashboard,
   Lock,
+  Scale,
+  Building2,
+  Landmark,
+  Loader2,
 } from 'lucide-react';
 
 import BeliefLogo from './components/BeliefLogo';
 import CoursesSection from './components/CoursesSection';
 import AdvisorySection from './components/AdvisorySection';
 import LibrarySection from './components/LibrarySection';
+import PublicDisclosureSection from './components/PublicDisclosureSection';
 import FloatingContact from './components/FloatingContact';
 import SpeakingChatbot from './components/SpeakingChatbot';
 import AnnouncementBar from './components/AnnouncementBar';
 import AdminDashboard from './components/admin/AdminDashboard';
 import { CourseItem } from './data/coursesData';
-import { AdminProvider, useAdmin } from './context/AdminContext';
+import {
+  AdminProvider,
+  useAdmin,
+  MANDATORY_COMPANY_NAME,
+  MANDATORY_TAX_CODE,
+  MANDATORY_CENTER_NAME,
+  MANDATORY_CENTER_CODE,
+  MANDATORY_NOTIFICATION_EMAIL,
+} from './context/AdminContext';
 
 // Pre-generated local image assets
 import heroKidsImg from './assets/images/hero_kids_learning_1790950201865.jpg';
@@ -69,10 +90,12 @@ function LandingPageContent() {
 
   const [activeEdTechTab, setActiveEdTechTab] = useState<'kahoot' | 'ai' | 'ipevo'>('kahoot');
   const [activeBacTab, setActiveBacTab] = useState<'believe' | 'active' | 'control'>('believe');
-  
+
   // Registration Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmittingLead, setIsSubmittingLead] = useState(false);
+  const [notifiedEmailTarget, setNotifiedEmailTarget] = useState(MANDATORY_NOTIFICATION_EMAIL);
   const [selectedCourseInfo, setSelectedCourseInfo] = useState<CourseItem | null>(null);
 
   const [formData, setFormData] = useState({
@@ -101,23 +124,46 @@ function LandingPageContent() {
     setIsModalOpen(true);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.parentName || !formData.phone) return;
 
-    // Save lead to Admin state
-    addLead({
-      parentName: formData.parentName,
-      phone: formData.phone,
-      childName: formData.childName,
-      childAge: formData.childAge,
-      program: formData.program,
-      preferredTime: formData.preferredTime,
-      branch: siteSettings.address,
-      note: formData.note,
-    });
+    setIsSubmittingLead(true);
+    try {
+      const res = await addLead({
+        parentName: formData.parentName,
+        phone: formData.phone,
+        childName: formData.childName,
+        childAge: formData.childAge,
+        program: formData.program,
+        preferredTime: formData.preferredTime,
+        branch: siteSettings.address,
+        note: formData.note,
+      });
+      setNotifiedEmailTarget(res.recipientEmail || MANDATORY_NOTIFICATION_EMAIL);
+      setIsSubmitted(true);
+    } finally {
+      setIsSubmittingLead(false);
+    }
+  };
 
-    setIsSubmitted(true);
+  const buildMailtoHref = () => {
+    const subject = encodeURIComponent(
+      `[${MANDATORY_CENTER_NAME}] Đăng ký tư vấn: ${formData.parentName} - ${formData.phone}`
+    );
+    const body = encodeURIComponent(
+      `THÔNG TIN PHỤ HUYNH ĐĂNG KÝ TƯ VẤN:\n` +
+        `- Trung tâm: ${MANDATORY_CENTER_NAME} (${MANDATORY_CENTER_CODE})\n` +
+        `- Công ty: ${MANDATORY_COMPANY_NAME} (MST: ${MANDATORY_TAX_CODE})\n` +
+        `- Họ và tên Phụ huynh: ${formData.parentName}\n` +
+        `- Số điện thoại / Zalo: ${formData.phone}\n` +
+        `- Họ tên & độ tuổi học viên: ${formData.childName || 'Chưa điền'} (${formData.childAge} tuổi)\n` +
+        `- Chương trình quan tâm: ${formData.program}\n` +
+        `- Khung giờ mong muốn: ${formData.preferredTime}\n` +
+        `- Cơ sở: ${siteSettings.address}\n` +
+        `- Ghi chú: ${formData.note || 'Đăng ký từ Website'}`
+    );
+    return `mailto:${MANDATORY_NOTIFICATION_EMAIL}?subject=${subject}&body=${body}`;
   };
 
   const resetForm = () => {
@@ -156,8 +202,8 @@ function LandingPageContent() {
               <BeliefLogo variant="blue" size="md" />
             </a>
 
-            {/* Desktop Navigation Links (Clean & Organized) */}
-            <div className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-600">
               <a href="#trang-chu" className="hover:text-[#1e3a8a] transition-colors py-1">
                 Trang chủ
               </a>
@@ -170,8 +216,15 @@ function LandingPageContent() {
               <a href="#khoa-hoc" className="hover:text-[#1e3a8a] transition-colors py-1">
                 Khóa học & Lộ trình
               </a>
+              <a
+                href="#cong-khai-nd81"
+                className="text-emerald-700 hover:text-[#1e3a8a] font-bold transition-colors py-1 flex items-center gap-1"
+              >
+                <Scale className="w-3.5 h-3.5" />
+                <span>Công khai (NĐ 81)</span>
+              </a>
 
-              {/* DROPDOWN MENU: Tiện ích & Hệ thống (Thư viện sách, Bảng tư vấn, EdTech, Dashboard) */}
+              {/* DROPDOWN MENU: Tiện ích & Hệ thống */}
               <div
                 className="relative py-2"
                 ref={navDropdownRef}
@@ -193,14 +246,32 @@ function LandingPageContent() {
                   />
                 </button>
 
-                {/* Dropdown Card */}
                 {isNavDropdownOpen && (
                   <div
                     onMouseLeave={() => setIsNavDropdownOpen(false)}
                     className="absolute left-1/2 -translate-x-1/2 top-full w-80 pt-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                   >
                     <div className="bg-white rounded-2xl shadow-2xl border border-slate-200/90 p-2 space-y-1">
-                      {/* 1. Thư viện sách */}
+                      {/* 1. Công khai Nghị định 81 */}
+                      <a
+                        href="#cong-khai-nd81"
+                        onClick={() => setIsNavDropdownOpen(false)}
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-emerald-50/80 transition-colors group cursor-pointer"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                          <Scale className="w-4 h-4" />
+                        </div>
+                        <div className="text-left flex-1 min-w-0">
+                          <div className="text-xs font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">
+                            Công khai Nghị định 81/2021/NĐ-CP
+                          </div>
+                          <div className="text-[11px] text-slate-400 leading-tight mt-0.5">
+                            Pháp lý, MST 0318836212, học phí, GV & CSVC
+                          </div>
+                        </div>
+                      </a>
+
+                      {/* 2. Thư viện sách */}
                       <a
                         href="#thu-vien"
                         onClick={() => setIsNavDropdownOpen(false)}
@@ -214,12 +285,12 @@ function LandingPageContent() {
                             Thư viện sách
                           </div>
                           <div className="text-[11px] text-slate-400 leading-tight mt-0.5">
-                            Giáo trình số & tài liệu học Oxford, Cambridge
+                            Giáo trình số & tài liệu học Cambridge
                           </div>
                         </div>
                       </a>
 
-                      {/* 2. Bảng tư vấn */}
+                      {/* 3. Bảng tư vấn */}
                       <a
                         href="#bang-tu-van"
                         onClick={() => setIsNavDropdownOpen(false)}
@@ -238,7 +309,7 @@ function LandingPageContent() {
                         </div>
                       </a>
 
-                      {/* 3. EdTech */}
+                      {/* 4. EdTech */}
                       <a
                         href="#edtech"
                         onClick={() => setIsNavDropdownOpen(false)}
@@ -257,10 +328,9 @@ function LandingPageContent() {
                         </div>
                       </a>
 
-                      {/* Divider */}
                       <div className="my-1 border-t border-slate-100"></div>
 
-                      {/* 4. Dashboard */}
+                      {/* 5. Dashboard */}
                       <button
                         type="button"
                         onClick={() => {
@@ -368,8 +438,14 @@ function LandingPageContent() {
             >
               Khóa học & Lộ trình
             </a>
+            <a
+              href="#cong-khai-nd81"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 text-sm font-bold text-emerald-700 bg-emerald-50/70 hover:bg-emerald-100 rounded-xl"
+            >
+              Công khai giáo dục (Nghị định 81/2021/NĐ-CP)
+            </a>
 
-            {/* Mobile Dropdown / Collapsible: Tiện ích & Hệ thống */}
             <div className="rounded-xl border border-slate-200/80 overflow-hidden bg-slate-50/60 my-1">
               <button
                 type="button"
@@ -462,9 +538,9 @@ function LandingPageContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column */}
             <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-[#1e3a8a] text-xs font-bold uppercase tracking-wider">
+              <div className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-[#1e3a8a] text-xs font-bold uppercase tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
-                <span>Hệ Thống Anh Ngữ Trực Thuộc BELIS GROUP</span>
+                <span>{MANDATORY_CENTER_NAME} • {MANDATORY_COMPANY_NAME} (MST: {MANDATORY_TAX_CODE})</span>
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-[#1e3a8a] tracking-tight leading-[1.15]">
@@ -473,16 +549,16 @@ function LandingPageContent() {
               </h1>
 
               <p className="text-base sm:text-lg lg:text-xl text-slate-600 font-normal leading-relaxed max-w-2xl">
-                Hệ sinh thái học tập toàn diện khơi dậy niềm tin và phát triển thế hệ tương lai. Khác biệt vượt trội với <strong className="font-bold text-[#1e3a8a]">phương pháp BAC độc quyền</strong> giúp học viên tự tin làm chủ tiếng Anh chỉ với 2 buổi/tuần.
+                <strong className="font-bold text-[#1e3a8a]">Trung tâm {MANDATORY_CENTER_NAME}</strong> (Mã đơn vị Sở GD&ĐT: <strong className="font-bold text-orange-600">{MANDATORY_CENTER_CODE}</strong> • QĐ thành lập số <strong className="font-bold text-[#1e3a8a]">2046/QĐ-SGDĐT</strong>) trực thuộc <strong className="font-bold text-slate-900">{MANDATORY_COMPANY_NAME}</strong>. Khác biệt vượt trội với <strong className="font-bold text-[#1e3a8a]">phương pháp BAC độc quyền</strong> giúp học viên tự tin làm chủ tiếng Anh.
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
                 <a
-                  href="#phuong-phap-bac"
+                  href="#khoa-hoc"
                   className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-bold text-white bg-[#1e3a8a] hover:bg-blue-900 rounded-xl shadow-lg shadow-blue-900/25 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 text-center"
                 >
-                  <span>Khám phá phương pháp BAC</span>
+                  <span>Khám phá lộ trình & Học phí</span>
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </a>
 
@@ -492,13 +568,21 @@ function LandingPageContent() {
                 >
                   <span>Nhận tư vấn ngay</span>
                 </button>
+
+                <a
+                  href="#cong-khai-nd81"
+                  className="inline-flex items-center justify-center px-5 py-3.5 text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-all text-center"
+                >
+                  <Scale className="w-4 h-4 mr-1.5 text-emerald-600" />
+                  <span>Công khai NĐ 81/2021</span>
+                </a>
               </div>
 
               {/* Trust Indicators */}
               <div className="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-4">
                 <div>
                   <div className="text-2xl sm:text-3xl font-black text-[#1e3a8a]">100%</div>
-                  <div className="text-xs text-slate-500 font-medium">Cam kết chuẩn đầu ra</div>
+                  <div className="text-xs text-slate-500 font-medium">GV Cử nhân & Chứng chỉ NVSP</div>
                 </div>
                 <div>
                   <div className="text-2xl sm:text-3xl font-black text-orange-500">2 Buổi</div>
@@ -517,16 +601,15 @@ function LandingPageContent() {
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-100 aspect-4/3 group">
                   <img
                     src={heroKidsImg}
-                    alt="Lớp học tương tác tại Belief English"
+                    alt="Lớp học tương tác tại Ngoại ngữ Niềm Tin Đông Tăng Long"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
-                  
-                  {/* Floating Badge on Image */}
+
                   <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-lg border border-slate-100 flex items-center gap-2.5">
                     <BeliefLogo variant="circle" size="sm" />
                     <div>
-                      <div className="text-[11px] font-extrabold text-[#1e3a8a]">Belief English</div>
-                      <div className="text-[9px] text-slate-500 font-semibold">Cơ sở Đông Tăng Long</div>
+                      <div className="text-[11px] font-extrabold text-[#1e3a8a]">{MANDATORY_CENTER_NAME}</div>
+                      <div className="text-[9px] text-slate-500 font-semibold">Mã TT: {MANDATORY_CENTER_CODE} • MST: {MANDATORY_TAX_CODE}</div>
                     </div>
                   </div>
 
@@ -535,8 +618,8 @@ function LandingPageContent() {
                       <GraduationCap className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-slate-900">Giáo Viên 7.0+ IELTS</div>
-                      <div className="text-[10px] text-slate-500">Chuyên môn sư phạm quốc tế</div>
+                      <div className="text-xs font-black text-slate-900">QĐ số 2046/QĐ-SGDĐT</div>
+                      <div className="text-[10px] text-slate-500">Sở Giáo dục & Đào tạo TP.HCM</div>
                     </div>
                   </div>
                 </div>
@@ -546,21 +629,21 @@ function LandingPageContent() {
         </div>
       </header>
 
-      {/* 3. ABOUT US - BELIS GROUP (3 Cards) */}
+      {/* 3. ABOUT US - BELIS GROUP */}
       <section id="ve-belis" className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="flex items-center justify-center gap-2">
               <BeliefLogo variant="icon-only" size="sm" />
               <span className="text-xs font-bold text-orange-500 tracking-widest uppercase">
-                Hệ Sinh Thái BELIS GROUP
+                {MANDATORY_COMPANY_NAME} • MST: {MANDATORY_TAX_CODE}
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1e3a8a] tracking-tight">
               Phát Triển Doanh Nghiệp Để Phát Triển Thế Hệ
             </h2>
             <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-              Tập đoàn BELIS GROUP định hình sứ mệnh giáo dục bằng việc trao truyền niềm tin và tạo dựng nền tảng tri thức vững chắc cho các thế hệ học viên Việt Nam vươn tầm thế giới.
+              <strong className="text-slate-900">{MANDATORY_COMPANY_NAME}</strong> (Mã số thuế: <strong className="text-orange-600">{MANDATORY_TAX_CODE}</strong>) đầu tư và vận hành <strong className="text-[#1e3a8a]">Trung tâm {MANDATORY_CENTER_NAME}</strong> nhằm trao truyền niềm tin và tạo dựng nền tảng tri thức vững chắc cho thế hệ học viên Việt Nam.
             </p>
           </div>
 
@@ -601,16 +684,16 @@ function LandingPageContent() {
                 Chất lượng tốt
               </h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                Đội ngũ giáo viên giàu chuyên môn với chứng chỉ quốc tế và IELTS 7.0+. Khung chương trình chuẩn hóa quốc tế, kiểm soát chặt chẽ qua Bài kiểm tra định kỳ (BKTDK) nghiêm ngặt.
+                Đội ngũ 100% giáo viên Việt Nam có trình độ Cử nhân và Chứng chỉ nghiệp vụ sư phạm theo chuẩn Sở GD&ĐT TP.HCM. Kiểm soát chất lượng qua Bài kiểm tra định kỳ (BKTDK) nghiêm ngặt.
               </p>
               <ul className="space-y-2 text-xs text-slate-700 font-medium">
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-600" />
-                  <span>100% Giáo viên đạt chuẩn sư phạm quốc tế</span>
+                  <span>100% Giáo viên đạt chuẩn sư phạm</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-600" />
-                  <span>Báo cáo tiến độ chi tiết tới từng phụ huynh</span>
+                  <span>Phụ đạo học sinh yếu hoàn toàn miễn phí</span>
                 </li>
               </ul>
             </div>
@@ -658,7 +741,6 @@ function LandingPageContent() {
             </p>
           </div>
 
-          {/* Interactive Navigation for BAC Pillars */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
             <button
               onClick={() => setActiveBacTab('believe')}
@@ -695,7 +777,6 @@ function LandingPageContent() {
             </button>
           </div>
 
-          {/* 3 Prominent BAC Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div
               className={`bg-white rounded-2xl p-8 border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
@@ -723,7 +804,7 @@ function LandingPageContent() {
                   <span>Xây dựng "Vùng An Toàn Ngôn Ngữ":</span>
                 </div>
                 <p className="text-slate-600">
-                  Tại Belief English, giáo viên tạo ra môi trường tích cực nơi mỗi câu trả lời đều được chào đón. Trẻ dám nói, dám thể hiện và hình thành phản xạ tự nhiên.
+                  Tại {MANDATORY_CENTER_NAME}, giáo viên tạo ra môi trường tích cực nơi mỗi câu trả lời đều được chào đón. Trẻ dám nói, dám thể hiện và hình thành phản xạ tự nhiên.
                 </p>
                 <div className="text-orange-700 font-semibold pt-1">
                   ✓ Học sinh tự tin thuyết trình trước đám đông
@@ -805,11 +886,14 @@ function LandingPageContent() {
       {/* 5. COURSES SECTION */}
       <CoursesSection onSelectCourse={handleOpenCourseModal} />
 
-      {/* 5.1 DIGITAL LIBRARY SECTION (THƯ VIỆN SÁCH & TÀI LIỆU SỐ) */}
+      {/* 5.1 DIGITAL LIBRARY SECTION */}
       <LibrarySection />
 
-      {/* 6. ADVISORY SECTION (BẢNG TƯ VẤN) */}
+      {/* 6. ADVISORY SECTION */}
       <AdvisorySection onOpenConsultation={handleGeneralModalOpen} />
+
+      {/* 6.1 PUBLIC DISCLOSURE SECTION (NGHỊ ĐỊNH 81/2021/NĐ-CP & THÔNG TƯ 09/2024/TT-BGDĐT) */}
+      <PublicDisclosureSection onOpenModal={handleGeneralModalOpen} />
 
       {/* 7. EDTECH INNOVATION SECTION */}
       <section id="edtech" className="py-16 lg:py-24 bg-slate-900 text-white relative overflow-hidden">
@@ -830,7 +914,7 @@ function LandingPageContent() {
               </h2>
 
               <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-                Biến mỗi giờ học thành một hành trình phiêu lưu tri thức thú vị. Tại Belief English, công nghệ không thay thế người thầy mà khuếch đại tình yêu học tập của học sinh.
+                Biến mỗi giờ học thành một hành trình phiêu lưu tri thức thú vị. Tại {MANDATORY_CENTER_NAME}, công nghệ không thay thế người thầy mà khuếch đại tình yêu học tập của học sinh.
               </p>
 
               <div className="space-y-4 pt-2">
@@ -909,7 +993,7 @@ function LandingPageContent() {
                   alt="Học sinh sử dụng công nghệ EdTech tại lớp học"
                   className="w-full h-80 sm:h-96 object-cover object-center"
                 />
-                
+
                 <div className="p-6 bg-slate-950/80 backdrop-blur-md border-t border-white/10">
                   <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
                     <span className="font-bold text-white flex items-center gap-1.5">
@@ -942,16 +1026,16 @@ function LandingPageContent() {
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#1e3a8a] text-xs font-bold uppercase tracking-wider">
                 <MapPin className="w-3.5 h-3.5 text-orange-500" />
-                <span>Không Gian Giáo Dục Hiện Đại</span>
+                <span>Không Gian Giáo Dục Đạt Chuẩn Sở GD&ĐT TP.HCM</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-[#1e3a8a] tracking-tight">
-                Cơ sở vật chất chuẩn quốc tế <br />
-                tại Đông Tăng Long
+                Cơ sở vật chất 221,5 m² (3 tầng) <br />
+                tại {MANDATORY_CENTER_NAME}
               </h2>
 
               <p className="text-slate-600 text-base leading-relaxed">
-                Tọa lạc tại khu đô thị hiện đại bậc nhất khu vực, cơ sở Belief English được thiết kế theo tiêu chuẩn công thái học với ánh sáng tự nhiên và trang thiết bị hỗ trợ giáo dục tiên tiến.
+                Tọa lạc tại Số 30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh, cơ sở được trang bị 03 phòng học ngoại ngữ, 03 phòng chức năng (Phòng tiếp tân & niêm yết công khai, Phòng thư viện, Phòng giáo viên & Giám đốc) cùng 96 trang thiết bị dạy học và hệ thống PCCC đạt chuẩn.
               </p>
 
               <div className="space-y-3 pt-2">
@@ -960,8 +1044,8 @@ function LandingPageContent() {
                     <Check className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Phòng học thông minh đa chức năng</h3>
-                    <p className="text-xs text-slate-500">Màn hình tương tác cỡ lớn, điều hòa lọc không khí hai chiều.</p>
+                    <h3 className="text-sm font-bold text-slate-900">03 Phòng học ngoại ngữ tiêu chuẩn (Tầng trệt & Tầng 1)</h3>
+                    <p className="text-xs text-slate-500">Trang bị 05 Tivi tương tác cỡ lớn, máy chiếu, bảng chống lóa và máy lạnh đầy đủ.</p>
                   </div>
                 </div>
 
@@ -970,8 +1054,8 @@ function LandingPageContent() {
                     <Check className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Góc thư viện sách tiếng Anh Cambridge & Oxford</h3>
-                    <p className="text-xs text-slate-500">Hàng trăm đầu sách truyện thiếu nhi phân cấp theo trình độ.</p>
+                    <h3 className="text-sm font-bold text-slate-900">Phòng Thư viện sách tiếng Anh Cambridge & FAHASA</h3>
+                    <p className="text-xs text-slate-500">Đầy đủ giáo trình Kid&apos;s Box New Generation, KET/PET, Mindset for IELTS, Market Leader.</p>
                   </div>
                 </div>
 
@@ -980,8 +1064,8 @@ function LandingPageContent() {
                     <Check className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Khu vực sinh hoạt và phòng chờ tiện nghi cho phụ huynh</h3>
-                    <p className="text-xs text-slate-500">Trà nước miễn phí, camera quan sát lớp học minh bạch và an toàn.</p>
+                    <h3 className="text-sm font-bold text-slate-900">An toàn PCCC (Biên bản 15/09/2025) & Vệ sinh trường học</h3>
+                    <p className="text-xs text-slate-500">Lối thoát hiểm thông thoáng, đèn sự cố, 06 bình chữa cháy và khu vệ sinh Nam/Nữ riêng biệt.</p>
                   </div>
                 </div>
               </div>
@@ -991,7 +1075,7 @@ function LandingPageContent() {
               <div className="relative rounded-3xl overflow-hidden shadow-xl border-4 border-slate-100 aspect-4/3">
                 <img
                   src={campusClassroomImg}
-                  alt="Không gian phòng học Belief English"
+                  alt="Không gian phòng học Ngoại ngữ Niềm Tin Đông Tăng Long"
                   className="w-full h-full object-cover object-center"
                 />
               </div>
@@ -1004,46 +1088,89 @@ function LandingPageContent() {
       <footer id="lien-he" className="bg-[#0f172a] text-slate-400 pt-16 pb-12 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
-            {/* Column 1: Brand & Logo */}
+            {/* Column 1: Mandatory Legal & Center Identity */}
             <div className="lg:col-span-5 space-y-4">
               <BeliefLogo variant="white" size="lg" />
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm pt-2">
-                <strong className="text-white">Trung tâm Ngoại ngữ Niềm Tin - Belief English</strong> là thành viên trực thuộc <strong className="text-white">BELIS GROUP</strong>. Tiên phong tri thức, hậu vận thành công với phương pháp đào tạo độc quyền BAC.
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-md pt-2">
+                <strong className="text-white">Trung tâm {MANDATORY_CENTER_NAME}</strong> (Belief English) trực thuộc <strong className="text-orange-400">{MANDATORY_COMPANY_NAME}</strong>. Tiên phong tri thức, hậu vận thành công với phương pháp đào tạo độc quyền BAC.
               </p>
-              <div className="text-xs text-slate-400 space-y-1 pt-1">
-                <div>Pháp nhân: <strong>{siteSettings.companyName}</strong></div>
-                <div>Đơn vị chủ quản: Hệ Thống Anh Ngữ Belief English</div>
+              <div className="text-xs text-slate-300 space-y-1.5 pt-2 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+                <div>
+                  <span className="text-slate-400">TÊN CÔNG TY:</span>{' '}
+                  <strong className="text-white">{MANDATORY_COMPANY_NAME}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400">MÃ SỐ THUẾ:</span>{' '}
+                  <strong className="text-orange-400 font-mono">{MANDATORY_TAX_CODE}</strong> (Cấp ngày 15/02/2025 bởi Sở KH&ĐT TP.HCM)
+                </div>
+                <div>
+                  <span className="text-slate-400">TÊN TRUNG TÂM:</span>{' '}
+                  <strong className="text-white">{MANDATORY_CENTER_NAME}</strong> (Mã TT: <strong className="text-emerald-400">{MANDATORY_CENTER_CODE}</strong>)
+                </div>
+                <div>
+                  <span className="text-slate-400">QĐ thành lập:</span>{' '}
+                  <strong className="text-slate-200">Số 2046/QĐ-SGDĐT ngày 10/11/2025</strong> (Sở GD&ĐT TP.HCM)
+                </div>
+                <div>
+                  <span className="text-slate-400">Giám đốc Trung tâm:</span>{' '}
+                  <strong className="text-slate-200">Ông Nguyễn Đồng Trưởng</strong> (QĐ số 2105/QĐ-SGDĐT)
+                </div>
+                <div>
+                  <span className="text-slate-400">Người đại diện pháp luật:</span>{' '}
+                  <strong className="text-slate-200">Ông Nguyễn Quốc Khánh</strong>
+                </div>
               </div>
             </div>
 
             {/* Column 2: Exact Contact & Hotlines */}
             <div className="lg:col-span-4 space-y-4">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                Địa Chỉ & Thông Tin Liên Hệ
+                Địa Chỉ & Thông Tin Liên Hệ Chính Thức
               </h3>
               <ul className="space-y-3 text-xs">
                 <li className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
                   <span>
-                    <strong className="text-white">Cơ sở:</strong> {siteSettings.address}
+                    <strong className="text-white">Địa chỉ hoạt động:</strong> {siteSettings.address}
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-orange-400 shrink-0" />
                   <span>
-                    Hotline: <a href={`tel:${cleanPhone(siteSettings.hotline1)}`} className="text-white font-bold hover:text-orange-400 transition-colors">{siteSettings.hotline1}</a> {siteSettings.hotline2 ? ` / ${siteSettings.hotline2}` : ''}
+                    Hotline:{' '}
+                    <a
+                      href={`tel:${cleanPhone(siteSettings.hotline1)}`}
+                      className="text-white font-bold hover:text-orange-400 transition-colors"
+                    >
+                      {siteSettings.hotline1}
+                    </a>
+                    {siteSettings.hotline2 ? ` / ${siteSettings.hotline2}` : ''}
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <MessageCircle className="w-4 h-4 text-orange-400 shrink-0" />
                   <span>
-                    Zalo Tư Vấn: <a href={`https://zalo.me/${cleanPhone(siteSettings.zalo)}`} target="_blank" rel="noopener noreferrer" className="text-white font-bold hover:text-orange-400 transition-colors">{siteSettings.zalo}</a>
+                    Zalo Tư Vấn:{' '}
+                    <a
+                      href={`https://zalo.me/${cleanPhone(siteSettings.zalo)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white font-bold hover:text-orange-400 transition-colors"
+                    >
+                      {siteSettings.zalo}
+                    </a>
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-orange-400 shrink-0" />
                   <span>
-                    Email: <a href={`mailto:${siteSettings.email}`} className="text-white hover:text-orange-400 transition-colors">{siteSettings.email}</a>
+                    Email nhận thông tin phụ huynh:{' '}
+                    <a
+                      href={`mailto:${MANDATORY_NOTIFICATION_EMAIL}`}
+                      className="text-white font-bold hover:text-orange-400 transition-colors"
+                    >
+                      {MANDATORY_NOTIFICATION_EMAIL}
+                    </a>
                   </span>
                 </li>
                 <li className="flex items-center gap-3">
@@ -1056,23 +1183,38 @@ function LandingPageContent() {
             {/* Column 3: Quick Navigation & Admin Access */}
             <div className="lg:col-span-3 space-y-4">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                Chương Trình & Quản Trị
+                Chương Trình & Công Khai Giáo Dục
               </h3>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Tiếng Anh Thiếu Nhi (Kid&apos;s Box: Starters, Movers, Flyers)</a>
+                  <a href="#cong-khai-nd81" className="text-emerald-400 hover:text-emerald-300 font-bold transition-colors">
+                    ★ Công khai theo Nghị định 81/2021/NĐ-CP
+                  </a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Luyện thi Chứng chỉ KET (A2) &amp; PET (B1)</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">
+                    Tiếng Anh Thiếu Nhi (Kid&apos;s Box: Starters, Movers, Flyers)
+                  </a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Luyện thi IELTS (15+ • 12 khóa)</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">
+                    Luyện thi Chứng chỉ KET (A2) &amp; PET (B1)
+                  </a>
                 </li>
                 <li>
-                  <a href="#khoa-hoc" className="hover:text-white transition-colors">Tiếng Anh Giao tiếp - Adults (18+ • 4 khóa)</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">
+                    Luyện thi IELTS (15+ • 12 khóa)
+                  </a>
                 </li>
                 <li>
-                  <a href="#thu-vien" className="hover:text-white transition-colors font-semibold text-orange-300">Thư viện sách & Tài liệu số</a>
+                  <a href="#khoa-hoc" className="hover:text-white transition-colors">
+                    Tiếng Anh Giao tiếp - Adults (18+ • 4 khóa)
+                  </a>
+                </li>
+                <li>
+                  <a href="#thu-vien" className="hover:text-white transition-colors font-semibold text-orange-300">
+                    Thư viện sách & Tài liệu số
+                  </a>
                 </li>
                 <li className="pt-2">
                   <button
@@ -1090,21 +1232,27 @@ function LandingPageContent() {
           {/* Copyright & Disclaimer Bar */}
           <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>
-              © {new Date().getFullYear()} {siteSettings.companyName}. Bản quyền thuộc về BELIS GROUP.
+              © {new Date().getFullYear()} {MANDATORY_COMPANY_NAME} (MST: {MANDATORY_TAX_CODE}) • Trung tâm {MANDATORY_CENTER_NAME} ({MANDATORY_CENTER_CODE}).
             </p>
             <div className="flex items-center gap-6">
-              <span className="hover:text-slate-400 cursor-pointer">Chính sách bảo mật</span>
-              <span className="hover:text-slate-400 cursor-pointer">Quy chế đào tạo</span>
-              <span className="hover:text-slate-400 cursor-pointer">Cam kết chuẩn đầu ra</span>
+              <a href="#cong-khai-nd81" className="hover:text-slate-300 cursor-pointer">
+                Công khai Nghị định 81/2021/NĐ-CP
+              </a>
+              <a href="#bang-tu-van" className="hover:text-slate-300 cursor-pointer">
+                Quy chế đào tạo
+              </a>
+              <a href="#khoa-hoc" className="hover:text-slate-300 cursor-pointer">
+                Biểu phí & Học bổng
+              </a>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Floating Action Buttons (Hotline & Zalo on Right) */}
+      {/* Floating Action Buttons */}
       <FloatingContact onOpenTestModal={handleGeneralModalOpen} />
 
-      {/* AI Speaking Chatbot with Gemini Flash (Bottom Left) */}
+      {/* AI Speaking Chatbot */}
       <SpeakingChatbot />
 
       {/* INTERACTIVE REGISTRATION MODAL */}
@@ -1126,10 +1274,12 @@ function LandingPageContent() {
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-[#1e3a8a]">
-                      {selectedCourseInfo ? 'Nhận Báo Giá & Ưu Đãi Học Bổng' : 'Đăng Ký Test Năng Lực 1-1'}
+                      {selectedCourseInfo ? 'Nhận Báo Giá & Ưu Đãi Học Bổng' : 'Đăng Ký Tư Vấn & Test Năng Lực 1-1'}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      {selectedCourseInfo ? selectedCourseInfo.name : 'Đánh giá 4 kỹ năng miễn phí cùng giáo viên chuyên môn'}
+                      {selectedCourseInfo
+                        ? selectedCourseInfo.name
+                        : `${MANDATORY_CENTER_NAME} • Gửi thông báo trực tiếp tới ${MANDATORY_NOTIFICATION_EMAIL}`}
                     </p>
                   </div>
                 </div>
@@ -1206,7 +1356,7 @@ function LandingPageContent() {
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Cơ sở tiếp nhận
+                      Cơ sở tiếp nhận ({MANDATORY_CENTER_NAME})
                     </label>
                     <input
                       type="text"
@@ -1234,13 +1384,24 @@ function LandingPageContent() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl shadow-lg shadow-orange-500/30 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
+                      disabled={isSubmittingLead}
+                      className="w-full py-3.5 text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 rounded-xl shadow-lg shadow-orange-500/30 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-60"
                     >
-                      Gửi Thông Tin & Nhận Báo Giá Ưu Đãi
+                      {isSubmittingLead ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Đang gửi thông báo tới {MANDATORY_NOTIFICATION_EMAIL}...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Gửi Thông Tin & Nhận Báo Giá Ưu Đãi</span>
+                        </>
+                      )}
                     </button>
                   </div>
-                  <p className="text-[11px] text-center text-slate-400">
-                    * Thông tin đăng ký được bảo mật 100% theo quy chế của BELIS GROUP.
+                  <p className="text-[11px] text-center text-slate-500">
+                    * Thông tin sẽ được gửi thông báo trực tiếp tới email trung tâm: <strong>{MANDATORY_NOTIFICATION_EMAIL}</strong>
                   </p>
                 </form>
               </div>
@@ -1253,23 +1414,37 @@ function LandingPageContent() {
                   Đăng Ký Thành Công!
                 </h3>
                 <p className="text-sm text-slate-600 max-w-sm mx-auto">
-                  Cảm ơn Quý phụ huynh <strong className="text-slate-900">{formData.parentName}</strong> đã gửi thông tin. Ban tuyển sinh Belief English sẽ liên hệ qua số điện thoại/Zalo <strong className="text-slate-900">{formData.phone}</strong> trong vòng 30 phút để gửi kế hoạch lộ trình và biểu phí ưu đãi.
+                  Cảm ơn Quý phụ huynh <strong className="text-slate-900">{formData.parentName}</strong> đã gửi thông tin. Hệ thống đã tự động gửi thông báo đăng ký trực tiếp vào email <strong className="text-[#1e3a8a]">{notifiedEmailTarget}</strong> và Ban tuyển sinh <strong className="text-slate-900">{MANDATORY_CENTER_NAME}</strong> sẽ liên hệ qua SĐT/Zalo <strong className="text-orange-600">{formData.phone}</strong> trong 30 phút.
                 </p>
+
+                <div className="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200 text-xs text-emerald-900 font-semibold flex items-center justify-center gap-2 max-w-sm mx-auto">
+                  <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Đã gửi thông báo tới: {notifiedEmailTarget}</span>
+                </div>
+
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left text-xs space-y-1.5 max-w-sm mx-auto">
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Hotline hỗ trợ:</span>
+                    <span className="text-slate-500">Trung tâm:</span>
+                    <span className="font-bold text-[#1e3a8a]">{MANDATORY_CENTER_NAME}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Hotline / Zalo:</span>
                     <span className="font-bold text-slate-800">{siteSettings.hotline1}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Zalo trung tâm:</span>
-                    <span className="font-bold text-blue-600">{siteSettings.zalo}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">Địa điểm:</span>
-                    <span className="font-bold text-slate-800">{siteSettings.address}</span>
+                    <span className="text-slate-500">Email tiếp nhận:</span>
+                    <span className="font-bold text-blue-600">{MANDATORY_NOTIFICATION_EMAIL}</span>
                   </div>
                 </div>
-                <div className="pt-2">
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
+                  <a
+                    href={buildMailtoHref()}
+                    className="px-4 py-2.5 text-xs font-bold text-[#1e3a8a] bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl transition-colors inline-flex items-center gap-1.5"
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Gửi thêm bản sao qua ứng dụng Email</span>
+                  </a>
                   <button
                     onClick={resetForm}
                     className="px-6 py-2.5 text-xs font-bold text-white bg-[#1e3a8a] rounded-xl shadow-md hover:bg-blue-900 transition-colors cursor-pointer"

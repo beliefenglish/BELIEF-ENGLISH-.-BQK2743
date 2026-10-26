@@ -1,8 +1,15 @@
 {
   "brand": {
-    "name": "Ngoại ngữ Niềm Tin Đông Tăng Long - BELIEF ENGLISH",
+    "name": "Ngoại ngữ Niềm Tin Đông Tăng Long",
+    "companyName": "CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP",
+    "taxCode": "0318836212",
+    "centerCode": "TTNN.TH-1897",
+    "establishmentDecision": "Số 2046/QĐ-SGDĐT ngày 10/11/2025 của Sở GD&ĐT TP.HCM",
+    "directorDecision": "Số 2105/QĐ-SGDĐT ngày 12/11/2025 của Sở GD&ĐT TP.HCM",
+    "directorName": "Nguyễn Đồng Trưởng",
+    "legalRepresentative": "Nguyễn Quốc Khánh",
     "logoUrl": "",
-    "address": "30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Thủ Đức, TP. HCM",
+    "address": "Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh",
     "phone": "0377.757.877",
     "email": "beliefenglish.edu@gmail.com",
     "facebookUrl": "https://facebook.com/beliefenglish"
@@ -362,5 +369,23 @@
       "tuitionNote": "Học phí: 60,000 đ/giờ • 2,880,000 đ / khóa 24 buổi. Áp dụng ưu đãi học bổng theo Bảng Tư Vấn Học Phí."
     }
   ],
-  "updatedAt": "2026-10-23T00:00:00.000Z"
+  "updatedAt": "2026-10-23T00:00:00.000Z",
+  "settings": {
+    "hotline1": "0377.757.877",
+    "hotline2": "0969.366.641",
+    "zalo": "0377.757.877",
+    "address": "Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh",
+    "email": "beliefenglish.edu@gmail.com",
+    "workHours": "Thứ Hai - Chủ Nhật (8h00 - 21h30)",
+    "showAnnouncement": true,
+    "announcementText": "🔥 Ưu Đãi Học Bổng Đặc Biệt (Mã MOI / GT): Giảm 50% học phí khóa đầu tiên + Giảm thêm 5% (4KH, 6KH, CV2C, OLD) + Tặng SGK (BOOK)!",
+    "announcementLinkText": "Nhận Ưu Đãi Ngay",
+    "companyName": "CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP",
+    "taxCode": "0318836212",
+    "centerName": "Ngoại ngữ Niềm Tin Đông Tăng Long",
+    "centerCode": "TTNN.TH-1897",
+    "establishmentDecision": "Số 2046/QĐ-SGDĐT cấp ngày 10/11/2025 bởi Sở GD&ĐT TP.HCM",
+    "directorName": "Nguyễn Đồng Trưởng (QĐ công nhận GĐ số 2105/QĐ-SGDĐT ngày 12/11/2025)",
+    "legalRepresentative": "Nguyễn Quốc Khánh"
+  }
 }

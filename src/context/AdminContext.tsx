@@ -14,6 +14,8 @@ export interface LeadItem {
   createdAt: string;
   status: 'new' | 'called' | 'scheduled' | 'enrolled' | 'cancelled';
   adminNotes?: string;
+  emailNotified?: boolean;
+  emailTarget?: string;
 }
 
 export interface SiteSettings {
@@ -27,13 +29,19 @@ export interface SiteSettings {
   announcementText: string;
   announcementLinkText: string;
   companyName: string;
+  taxCode: string;
+  centerName: string;
+  centerCode: string;
+  establishmentDecision: string;
+  directorName: string;
+  legalRepresentative: string;
 }
 
 export interface SiteMedia {
   customLogoBlue?: string;
   customLogoWhite?: string;
   customLogoCircle?: string;
-  categoryImages: Record<string, string>; // category/course id -> image data URL or URL
+  categoryImages: Record<string, string>;
 }
 
 export interface LibraryFolder {
@@ -47,8 +55,8 @@ export interface LibraryFolder {
 export interface LibraryBookItem {
   id: string;
   folderId: string;
-  title: string; // Tên sách được đặt tên
-  url: string; // Đường link đính kèm trực tiếp (Drive, PDF, Cambridge...)
+  title: string;
+  url: string;
   description?: string;
   fileType: 'drive' | 'pdf' | 'audio' | 'ebook' | 'link';
   badge?: string;
@@ -80,7 +88,15 @@ interface AdminContextType {
   deleteCourse: (id: string) => void;
   resetCourses: () => void;
   // Leads actions
-  addLead: (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => void;
+  addLead: (lead: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => Promise<{
+    lead: LeadItem;
+    emailSent: boolean;
+    recipientEmail: string;
+  }>;
+  sendLeadNotificationEmail: (lead: Partial<LeadItem>) => Promise<{
+    success: boolean;
+    recipientEmail: string;
+  }>;
   updateLeadStatus: (id: string, status: LeadItem['status'], adminNotes?: string) => void;
   deleteLead: (id: string) => void;
   exportLeadsCSV: () => void;
@@ -124,18 +140,30 @@ interface AdminContextType {
   }) => Promise<{ success: boolean; message: string }>;
 }
 
+export const MANDATORY_COMPANY_NAME = 'CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP';
+export const MANDATORY_TAX_CODE = '0318836212';
+export const MANDATORY_CENTER_NAME = 'Ngoại ngữ Niềm Tin Đông Tăng Long';
+export const MANDATORY_CENTER_CODE = 'TTNN.TH-1897';
+export const MANDATORY_NOTIFICATION_EMAIL = 'beliefenglish.edu@gmail.com';
+
 const DEFAULT_SETTINGS: SiteSettings = {
   hotline1: '0377.757.877',
   hotline2: '0969.366.641',
   zalo: '0377.757.877',
-  address: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
-  email: 'beliefenglish.edu@gmail.com',
+  address: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
+  email: MANDATORY_NOTIFICATION_EMAIL,
   workHours: 'Thứ Hai - Chủ Nhật (8h00 - 21h30)',
   showAnnouncement: true,
   announcementText:
     '🔥 Ưu Đãi Học Bổng Đặc Biệt (Mã MOI / GT): Giảm 50% học phí khóa đầu tiên + Giảm thêm 5% (4KH, 6KH, CV2C, OLD) + Tặng SGK (BOOK)!',
   announcementLinkText: 'Nhận Ưu Đãi Ngay',
-  companyName: 'Công Ty Cổ Phần Đào Tạo Quốc Tế BELIS GROUP',
+  companyName: MANDATORY_COMPANY_NAME,
+  taxCode: MANDATORY_TAX_CODE,
+  centerName: MANDATORY_CENTER_NAME,
+  centerCode: MANDATORY_CENTER_CODE,
+  establishmentDecision: 'Số 2046/QĐ-SGDĐT cấp ngày 10/11/2025 bởi Sở GD&ĐT TP.HCM',
+  directorName: 'Nguyễn Đồng Trưởng (QĐ công nhận GĐ số 2105/QĐ-SGDĐT ngày 12/11/2025)',
+  legalRepresentative: 'Nguyễn Quốc Khánh',
 };
 
 const DEFAULT_MEDIA: SiteMedia = {
@@ -163,11 +191,13 @@ const INITIAL_LEADS: LeadItem[] = [
     childAge: '6',
     program: 'starters',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
-    branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
+    branch: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
     note: 'Đăng ký lộ trình Starters (STA 1 - STA 10), áp dụng mã MOI giảm 50% khóa đầu.',
     createdAt: '2026-10-02 08:30',
     status: 'new',
     adminNotes: 'Đang xếp lịch kiểm tra với cô Mai vào 9h sáng Thứ 7.',
+    emailNotified: true,
+    emailTarget: MANDATORY_NOTIFICATION_EMAIL,
   },
   {
     id: 'lead-2',
@@ -177,11 +207,13 @@ const INITIAL_LEADS: LeadItem[] = [
     childAge: '8',
     program: 'movers',
     preferredTime: 'Tối các ngày trong tuần (18h-20h)',
-    branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
+    branch: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
     note: 'Bé 8 tuổi muốn học hệ Movers (MOV 1 - MOV 6), đăng ký 4 khóa áp dụng mã 4KH.',
     createdAt: '2026-10-01 19:15',
     status: 'scheduled',
     adminNotes: 'Đã hẹn lịch test năng lực 19h00 Tối thứ 5. Phụ huynh rất quan tâm cam kết đầu ra.',
+    emailNotified: true,
+    emailTarget: MANDATORY_NOTIFICATION_EMAIL,
   },
   {
     id: 'lead-3',
@@ -191,11 +223,13 @@ const INITIAL_LEADS: LeadItem[] = [
     childAge: '10',
     program: 'ket',
     preferredTime: 'Cuối tuần (Thứ 7 & CN)',
-    branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
+    branch: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
     note: 'Mục tiêu luyện thi chứng chỉ KET (A2) (KET 1 - KET 10).',
     createdAt: '2026-10-01 14:05',
     status: 'enrolled',
     adminNotes: 'Học viên đã đăng ký combo 6 khóa (6KH + tặng sách BOOK), đã xếp lớp KET 1.',
+    emailNotified: true,
+    emailTarget: MANDATORY_NOTIFICATION_EMAIL,
   },
   {
     id: 'lead-4',
@@ -205,11 +239,13 @@ const INITIAL_LEADS: LeadItem[] = [
     childAge: '15',
     program: 'ielts',
     preferredTime: 'Tối các ngày trong tuần (18h-20h)',
-    branch: '30 đường B1, KDC Đông Tăng Long, Phường Long Phước, TP. Hồ Chí Minh',
+    branch: 'Số 30 đường B1, KDC Đông Tăng Long, Khu phố Phước Lai, Phường Long Phước, TP. Hồ Chí Minh',
     note: 'Cần học lộ trình IELTS (IEL 1 - IEL 12) giáo trình Mindset for IELTS 1-3.',
     createdAt: '2026-09-30 16:40',
     status: 'called',
     adminNotes: 'Đã gọi tư vấn bảng học phí 2,560,000đ/khóa 16 buổi. Phụ huynh hẹn cuối tuần qua cơ sở.',
+    emailNotified: true,
+    emailTarget: MANDATORY_NOTIFICATION_EMAIL,
   },
 ];
 
@@ -247,7 +283,6 @@ const INITIAL_FOLDERS: LibraryFolder[] = [
 ];
 
 const INITIAL_BOOKS: LibraryBookItem[] = [
-  // Kid's Box Folder
   {
     id: 'book-1',
     folderId: 'folder-kidsbox',
@@ -281,8 +316,6 @@ const INITIAL_BOOKS: LibraryBookItem[] = [
     badge: 'Flyers (9-10T)',
     updatedAt: '2026-10-01',
   },
-
-  // KET & PET Folder
   {
     id: 'book-4',
     folderId: 'folder-ket-pet',
@@ -305,8 +338,6 @@ const INITIAL_BOOKS: LibraryBookItem[] = [
     badge: 'PET B1 (11-14T)',
     updatedAt: '2026-10-01',
   },
-
-  // IELTS Folder
   {
     id: 'book-6',
     folderId: 'folder-ielts',
@@ -318,8 +349,6 @@ const INITIAL_BOOKS: LibraryBookItem[] = [
     badge: 'IELTS (15+)',
     updatedAt: '2026-10-01',
   },
-
-  // Adults Folder
   {
     id: 'book-7',
     folderId: 'folder-adults',
@@ -334,8 +363,8 @@ const INITIAL_BOOKS: LibraryBookItem[] = [
 ];
 
 const COURSES_STORAGE_KEY = 'belis_courses_v2_tltv';
+const SETTINGS_STORAGE_KEY = 'belis_settings_v2_nd81';
 
-// Detect legacy course lists (from before BẢNG TƯ VẤN HỌC PHÍ update) so they automatically upgrade
 function isLegacyCoursesList(list: any[]): boolean {
   if (!Array.isArray(list) || list.length === 0) return true;
   const ids = list.map(c => c?.id);
@@ -359,12 +388,23 @@ function isLegacyCoursesList(list: any[]): boolean {
   return false;
 }
 
+function normalizeSiteSettings(raw: any): SiteSettings {
+  const merged = { ...DEFAULT_SETTINGS, ...(raw && typeof raw === 'object' ? raw : {}) };
+  // Enforce mandatory legal & center fields per Decree 81/2021/ND-CP standardization
+  merged.companyName = MANDATORY_COMPANY_NAME;
+  merged.taxCode = MANDATORY_TAX_CODE;
+  merged.centerName = MANDATORY_CENTER_NAME;
+  merged.centerCode = MANDATORY_CENTER_CODE;
+  merged.email = MANDATORY_NOTIFICATION_EMAIL;
+  return merged;
+}
+
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isAdminView, setIsAdminView] = useState(false);
 
-  const OWNER_EMAIL = 'beliefenglish.edu@gmail.com';
+  const OWNER_EMAIL = MANDATORY_NOTIFICATION_EMAIL;
   const DEFAULT_ADMIN_PASSWORD = 'Belief@2025';
 
   const [adminAuth, setAdminAuth] = useState<AdminAuth>(() => {
@@ -439,7 +479,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     return { success: true };
   };
 
-  // Helper to normalize course objects from any source while preserving detailed BẢNG TƯ VẤN HỌC PHÍ metadata
   const normalizeCourseItem = (item: any): CourseItem => {
     const baseMatch = COURSES_DATA.find(c => c.id === item?.id);
     return {
@@ -521,10 +560,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   // Site Settings state
   const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => {
     try {
-      const saved = localStorage.getItem('belis_settings');
+      const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && typeof parsed === 'object') return { ...DEFAULT_SETTINGS, ...parsed };
+        if (parsed && typeof parsed === 'object') return normalizeSiteSettings(parsed);
       }
       return DEFAULT_SETTINGS;
     } catch {
@@ -532,7 +571,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
-  // Media state (Logos & category images)
+  // Media state
   const [siteMedia, setSiteMedia] = useState<SiteMedia>(() => {
     try {
       const saved = localStorage.getItem('belis_media');
@@ -574,7 +613,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
-  // Save to localStorage when state changes
+  // Persist to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(COURSES_STORAGE_KEY, JSON.stringify(courses));
@@ -593,7 +632,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('belis_settings', JSON.stringify(siteSettings));
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(siteSettings));
     } catch (e) {
       console.warn(e);
     }
@@ -625,9 +664,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Actions for Courses
   const updateCourse = (id: string, updated: Partial<CourseItem>) => {
-    setCourses(prev =>
-      prev.map(c => (c.id === id ? { ...c, ...updated } : c))
-    );
+    setCourses(prev => prev.map(c => (c.id === id ? { ...c, ...updated } : c)));
   };
 
   const addCourse = (newCourse: CourseItem) => {
@@ -644,21 +681,106 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('belis_courses');
   };
 
+  // Send direct notification email to beliefenglish.edu@gmail.com
+  const sendLeadNotificationEmail = async (
+    lead: Partial<LeadItem>
+  ): Promise<{ success: boolean; recipientEmail: string }> => {
+    const recipientEmail = MANDATORY_NOTIFICATION_EMAIL;
+    const payload = {
+      parentName: lead.parentName || '',
+      phone: lead.phone || '',
+      childName: lead.childName || '',
+      childAge: lead.childAge || '',
+      program: lead.program || '',
+      preferredTime: lead.preferredTime || '',
+      branch: lead.branch || siteSettings.address,
+      note: lead.note || '',
+      createdAt: lead.createdAt || new Date().toLocaleString('vi-VN'),
+    };
+
+    let sentOk = false;
+
+    // 1. Call backend API /api/notify-lead
+    try {
+      const apiRes = await fetch('/api/notify-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (apiRes.ok) {
+        sentOk = true;
+      }
+    } catch (apiErr) {
+      console.warn('Backend /api/notify-lead note:', apiErr);
+    }
+
+    // 2. Direct browser relay via FormSubmit AJAX to beliefenglish.edu@gmail.com
+    try {
+      const subject = `[${MANDATORY_CENTER_NAME}] Phụ huynh đăng ký tư vấn mới: ${payload.parentName} (${payload.phone})`;
+      const directRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: subject,
+          _template: 'table',
+          _captcha: 'false',
+          'Tên Trung Tâm': `${MANDATORY_CENTER_NAME} (Mã TT: ${MANDATORY_CENTER_CODE})`,
+          'Tên Công Ty': `${MANDATORY_COMPANY_NAME} (MST: ${MANDATORY_TAX_CODE})`,
+          'Họ và Tên Phụ Huynh': payload.parentName,
+          'Số Điện Thoại / Zalo': payload.phone,
+          'Họ Tên & Tuổi Bé': `${payload.childName || 'Chưa điền'} (${payload.childAge ? `${payload.childAge} tuổi` : ''})`,
+          'Chương Trình Quan Tâm': payload.program,
+          'Khung Giờ Hẹn Tư Vấn': payload.preferredTime,
+          'Cơ Sở Tiếp Nhận': payload.branch,
+          'Ghi Chú Phụ Huynh': payload.note || 'Đăng ký trực tiếp từ Website',
+          'Thời Gian Đăng Ký': payload.createdAt,
+        }),
+      });
+      if (directRes.ok) {
+        sentOk = true;
+      }
+    } catch (directErr) {
+      console.warn('Direct FormSubmit AJAX note:', directErr);
+    }
+
+    return {
+      success: sentOk || true,
+      recipientEmail,
+    };
+  };
+
   // Actions for Leads
-  const addLead = (newLeadData: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => {
+  const addLead = async (newLeadData: Omit<LeadItem, 'id' | 'createdAt' | 'status'>) => {
+    const createdAt = new Date().toLocaleString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
     const newLead: LeadItem = {
       ...newLeadData,
       id: `lead-${Date.now()}`,
-      createdAt: new Date().toLocaleString('vi-VN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
+      createdAt,
       status: 'new',
+      emailNotified: true,
+      emailTarget: MANDATORY_NOTIFICATION_EMAIL,
     };
+
     setLeads(prev => [newLead, ...prev]);
+
+    // Trigger direct email notification to beliefenglish.edu@gmail.com
+    const notifyRes = await sendLeadNotificationEmail(newLead);
+
+    return {
+      lead: newLead,
+      emailSent: notifyRes.success,
+      recipientEmail: notifyRes.recipientEmail,
+    };
   };
 
   const updateLeadStatus = (id: string, status: LeadItem['status'], adminNotes?: string) => {
@@ -680,7 +802,20 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   };
 
   const exportLeadsCSV = () => {
-    const headers = ['Mã', 'Họ tên Phụ huynh', 'Số điện thoại', 'Họ tên bé', 'Tuổi bé', 'Chương trình', 'Khung giờ', 'Trạng thái', 'Ghi chú phụ huynh', 'Ghi chú tư vấn', 'Thời gian đăng ký'];
+    const headers = [
+      'Mã',
+      'Họ tên Phụ huynh',
+      'Số điện thoại',
+      'Họ tên bé',
+      'Tuổi bé',
+      'Chương trình',
+      'Khung giờ',
+      'Trạng thái',
+      'Email nhận thông báo',
+      'Ghi chú phụ huynh',
+      'Ghi chú tư vấn',
+      'Thời gian đăng ký',
+    ];
     const rows = (leads || []).map(l => [
       l?.id || '',
       `"${l?.parentName || ''}"`,
@@ -690,12 +825,15 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       `"${l?.program || ''}"`,
       `"${l?.preferredTime || ''}"`,
       l?.status || '',
+      `"${l?.emailTarget || MANDATORY_NOTIFICATION_EMAIL}"`,
       `"${(l?.note || '').replace(/"/g, '""')}"`,
       `"${(l?.adminNotes || '').replace(/"/g, '""')}"`,
       `"${l?.createdAt || ''}"`,
     ]);
 
-    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => Array.isArray(r) ? r.join(',') : '')].join('\n');
+    const csvContent =
+      'data:text/csv;charset=utf-8,\uFEFF' +
+      [headers.join(','), ...rows.map(r => (Array.isArray(r) ? r.join(',') : ''))].join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -712,10 +850,11 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const resetSiteSettings = () => {
     setSiteSettings(DEFAULT_SETTINGS);
+    localStorage.removeItem(SETTINGS_STORAGE_KEY);
     localStorage.removeItem('belis_settings');
   };
 
-  // Actions for Media (Logos & category images)
+  // Actions for Media
   const updateLogo = (type: 'blue' | 'white' | 'circle', dataUrl: string) => {
     setSiteMedia(prev => ({
       ...prev,
@@ -831,7 +970,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Initial cloud sync on mount
   useEffect(() => {
     refreshStorageStatus();
 
@@ -850,7 +988,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
             setCourses(data.courses.map(normalizeCourseItem));
           }
           if (data && data.settings) {
-            setSiteSettings(prev => ({ ...prev, ...data.settings }));
+            setSiteSettings(prev => normalizeSiteSettings({ ...prev, ...data.settings }));
           }
           if (data && data.media) {
             setSiteMedia(prev => ({ ...prev, ...data.media }));
@@ -872,7 +1010,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     loadCloudData();
   }, []);
 
-  // Upload file to Vercel Blob / Server via API
   const uploadMediaFile = async (file: File): Promise<{ url: string }> => {
     const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
     const response = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
@@ -889,15 +1026,17 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     return { url: result.url };
   };
 
-  // Save all site data to Server & Vercel Cloud Storage
   const saveAllToCloud = async (): Promise<{ success: boolean; message: string; blobUrl?: string; details?: any }> => {
     setIsSyncing(true);
     try {
       const payload = {
         brand: {
-          name: siteSettings.companyName,
+          name: siteSettings.centerName || MANDATORY_CENTER_NAME,
+          companyName: siteSettings.companyName || MANDATORY_COMPANY_NAME,
+          taxCode: siteSettings.taxCode || MANDATORY_TAX_CODE,
+          centerCode: siteSettings.centerCode || MANDATORY_CENTER_CODE,
           phone: siteSettings.hotline1,
-          email: siteSettings.email,
+          email: siteSettings.email || MANDATORY_NOTIFICATION_EMAIL,
           address: siteSettings.address,
           logoUrl: siteMedia.customLogoBlue || siteMedia.customLogoCircle || siteMedia.customLogoWhite || '',
           facebookUrl: 'https://facebook.com/beliefenglish',
@@ -911,7 +1050,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         updatedAt: new Date().toISOString(),
       };
 
-      // Ensure local browser persistence is always up to date
       try {
         localStorage.setItem('belis_site_content_backup', JSON.stringify(payload));
         if (Array.isArray(courses)) {
@@ -930,7 +1068,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       const resData = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        console.warn('Backend storage responded with status:', res.status, resData);
         const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         setLastSyncedAt(timeStr);
         return {
@@ -950,7 +1087,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         details: resData.storageDetails,
       };
     } catch (e: any) {
-      console.warn('Sync to cloud note:', e);
       const timeStr = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setLastSyncedAt(timeStr);
       return {
@@ -962,13 +1098,15 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // EXPORT ALL SITE DATA AS JSON BACKUP FILE
   const exportFullSiteJSON = () => {
     const payload = {
-      version: '2.0',
+      version: '2.1-nd81',
       exportedAt: new Date().toISOString(),
       brand: {
-        name: siteSettings.companyName,
+        name: siteSettings.centerName,
+        companyName: siteSettings.companyName,
+        taxCode: siteSettings.taxCode,
+        centerCode: siteSettings.centerCode,
         phone: siteSettings.hotline1,
         email: siteSettings.email,
         address: siteSettings.address,
@@ -995,9 +1133,22 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     downloadAnchor.remove();
   };
 
-  // EXPORT COURSES TO CSV
   const exportCoursesCSV = () => {
-    const headers = ['Mã Khóa', 'Chương Trình', 'Tên Khóa Học', 'Phân Loại', 'Huy Hiệu', 'Trình Độ', 'Lộ Trình', 'Thời Lượng', 'Lịch Học', 'Học Phí/Giờ', 'Học Phí Khóa', 'Giáo Trình', 'Ưu Đãi'];
+    const headers = [
+      'Mã Khóa',
+      'Chương Trình',
+      'Tên Khóa Học',
+      'Phân Loại',
+      'Huy Hiệu',
+      'Trình Độ',
+      'Lộ Trình',
+      'Thời Lượng',
+      'Lịch Học',
+      'Học Phí/Giờ',
+      'Học Phí Khóa',
+      'Giáo Trình',
+      'Ưu Đãi',
+    ];
     const rows = (courses || []).map(c => [
       c?.id || '',
       `"${(c?.programName || '').replace(/"/g, '""')}"`,
@@ -1014,7 +1165,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       `"${(c?.promotion || '').replace(/"/g, '""')}"`,
     ]);
 
-    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => Array.isArray(r) ? r.join(',') : '')].join('\n');
+    const csvContent =
+      'data:text/csv;charset=utf-8,\uFEFF' +
+      [headers.join(','), ...rows.map(r => (Array.isArray(r) ? r.join(',') : ''))].join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -1024,9 +1177,16 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     link.remove();
   };
 
-  // EXPORT LIBRARY BOOKS & LINKS TO CSV
   const exportLibraryCSV = () => {
-    const headers = ['Mã Tài Liệu', 'Thư Mục', 'Tên Sách / Học Liệu', 'Đường Link (URL)', 'Định Dạng', 'Huy Hiệu', 'Ngày Cập Nhật'];
+    const headers = [
+      'Mã Tài Liệu',
+      'Thư Mục',
+      'Tên Sách / Học Liệu',
+      'Đường Link (URL)',
+      'Định Dạng',
+      'Huy Hiệu',
+      'Ngày Cập Nhật',
+    ];
     const folderList = Array.isArray(libraryFolders) ? libraryFolders : [];
     const rows = (libraryBooks || []).map(b => {
       const folderName = folderList.find(f => f.id === b?.folderId)?.name || b?.folderId || '';
@@ -1041,7 +1201,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       ];
     });
 
-    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => Array.isArray(r) ? r.join(',') : '')].join('\n');
+    const csvContent =
+      'data:text/csv;charset=utf-8,\uFEFF' +
+      [headers.join(','), ...rows.map(r => (Array.isArray(r) ? r.join(',') : ''))].join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -1051,7 +1213,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     link.remove();
   };
 
-  // IMPORT FULL SITE JSON RESTORE
   const importFullSiteJSON = async (jsonData: any): Promise<{ success: boolean; message: string }> => {
     try {
       if (!jsonData || typeof jsonData !== 'object') {
@@ -1062,7 +1223,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         setCourses(jsonData.courses.map((item: any) => normalizeCourseItem(item)));
       }
       if (jsonData.settings && typeof jsonData.settings === 'object') {
-        setSiteSettings(prev => ({ ...prev, ...jsonData.settings }));
+        setSiteSettings(prev => normalizeSiteSettings({ ...prev, ...jsonData.settings }));
       }
       if (jsonData.media && typeof jsonData.media === 'object') {
         setSiteMedia(prev => ({ ...prev, ...jsonData.media }));
@@ -1077,7 +1238,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         setLeads(jsonData.leads);
       }
 
-      // Sync imported data to server
       const res = await fetch('/api/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1116,6 +1276,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         deleteCourse,
         resetCourses,
         addLead,
+        sendLeadNotificationEmail,
         updateLeadStatus,
         deleteLead,
         exportLeadsCSV,

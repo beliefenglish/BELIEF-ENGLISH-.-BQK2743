@@ -2,6 +2,13 @@ import { BookStageItem, SubCourseRow } from '../src/data/coursesData';
 
 export interface BrandInfo {
   name: string;
+  companyName?: string;
+  taxCode?: string;
+  centerCode?: string;
+  establishmentDecision?: string;
+  directorDecision?: string;
+  directorName?: string;
+  legalRepresentative?: string;
   logoUrl: string;
   address: string;
   phone: string;

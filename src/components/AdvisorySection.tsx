@@ -55,7 +55,6 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
     },
   ];
 
-  // Bảng Ma Trận đồng bộ 100% với BẢNG TƯ VẤN HỌC PHÍ - TÀI LIỆU TƯ VẤN
   const levelsMatrix = [
     {
       ageGroup: '5 - 8 Tuổi (Thiếu nhi)',
@@ -111,23 +110,21 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
   return (
     <section id="bang-tu-van" className="py-20 lg:py-28 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <div className="flex items-center justify-center gap-2">
             <BeliefLogo variant="circle" size="sm" />
             <span className="text-xs font-bold text-orange-500 uppercase tracking-widest">
-              Quy Trình Tiếp Nhận & Khảo Thí Chuẩn Mực
+              Ngoại ngữ Niềm Tin Đông Tăng Long • CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP (MST: 0318836212)
             </span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1e3a8a] tracking-tight">
             Bảng Tư Vấn & Quy Trình Đào Tạo BELIS
           </h2>
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
-            Mỗi học viên tại Belief English đều được thiết kế kế hoạch học tập chuẩn hóa theo Bảng Tư Vấn Học Phí, đảm bảo đúng điểm xuất phát và đạt chuẩn cam kết đầu ra.
+            Mỗi học viên tại Trung tâm Ngoại ngữ Niềm Tin Đông Tăng Long đều được thiết kế kế hoạch học tập chuẩn hóa theo Bảng Tư Vấn Học Phí, đảm bảo đúng điểm xuất phát và đạt chuẩn cam kết đầu ra.
           </p>
         </div>
 
-        {/* 5-Step Process Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-16">
           {(steps || []).map((item, idx) => {
             const Icon = item.icon;
@@ -157,7 +154,6 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
           })}
         </div>
 
-        {/* Age & Level Matrix Table */}
         <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-md mb-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
@@ -165,7 +161,7 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
                 Bảng Ma Trận Phân Bổ Cấp Độ, Học Phí & Giáo Trình Theo Lứa Tuổi
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Đồng bộ chính xác theo Bảng Tư Vấn Học Phí - Tài Liệu Tư Vấn Belief English (1 bài kiểm tra định kỳ / khóa)
+                Đồng bộ chính xác theo Bảng Tư Vấn Học Phí - Tài Liệu Tư Vấn Ngoại ngữ Niềm Tin Đông Tăng Long (1 bài kiểm tra định kỳ / khóa)
               </p>
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold shrink-0 self-start sm:self-auto">
@@ -212,17 +208,16 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
           </div>
         </div>
 
-        {/* Advisory Action Banner */}
         <div className="bg-gradient-to-r from-[#1e3a8a] via-blue-900 to-[#0f172a] rounded-3xl p-8 sm:p-10 text-white shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="space-y-3 text-left max-w-2xl">
             <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">
-              Tư Vấn Miễn Phí 24/7 Cùng Chuyên Viên BELIS
+              Tư Vấn Miễn Phí 24/7 • Ngoại ngữ Niềm Tin Đông Tăng Long
             </span>
             <h3 className="text-2xl sm:text-3xl font-black tracking-tight">
               Quý phụ huynh cần tư vấn xếp lớp & nhận thông tin học bổng?
             </h3>
             <p className="text-sm text-blue-100 font-normal leading-relaxed">
-              Liên hệ ngay qua Hotline hoặc Zalo chính thức của Belief English để được hỗ trợ kiểm tra trình độ và nhận bảng tư vấn lộ trình chi tiết nhất.
+              Liên hệ ngay qua Hotline, Zalo hoặc điền form đăng ký (thông báo tự động gửi về email <strong>beliefenglish.edu@gmail.com</strong>) để được hỗ trợ kiểm tra trình độ và nhận bảng tư vấn lộ trình chi tiết.
             </p>
             <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-blue-200 pt-2">
               <span className="flex items-center gap-1.5">
@@ -231,11 +226,11 @@ export default function AdvisorySection({ onOpenConsultation }: AdvisorySectionP
               </span>
               <span className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-emerald-400" />
-                Zalo: 0377.757.877
+                Email: beliefenglish.edu@gmail.com
               </span>
               <span className="flex items-center gap-1.5">
                 <Check className="w-4 h-4 text-emerald-400" />
-                Cơ sở KDC Đông Tăng Long
+                Số 30 đường B1, KDC Đông Tăng Long, P. Long Phước
               </span>
             </div>
           </div>

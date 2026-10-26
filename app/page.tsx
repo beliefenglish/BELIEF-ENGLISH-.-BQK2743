@@ -19,7 +19,6 @@ import {
   MonitorPlay,
   ShieldCheck,
   Award,
-  ChevronRight,
   LayoutDashboard,
 } from 'lucide-react';
 import { SiteContent } from '@/types/content';
@@ -58,19 +57,23 @@ export default async function HomePage() {
   const content = await getSiteContent();
   const { brand, hero, bac, courses } = content;
 
+  const companyName = 'CÔNG TY CỔ PHẦN ĐÀO TẠO QUỐC TẾ BELIS GROUP';
+  const taxCode = '0318836212';
+  const centerName = 'Ngoại ngữ Niềm Tin Đông Tăng Long';
+  const centerCode = 'TTNN.TH-1897';
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-orange-500 selection:text-white">
       {/* 1. NAVBAR */}
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Brand Logo & Name */}
             <a href="/" className="flex items-center gap-3 group">
               {brand.logoUrl ? (
                 <div className="h-12 w-auto max-w-[180px] flex items-center justify-center">
                   <img
                     src={brand.logoUrl}
-                    alt={brand.name}
+                    alt={centerName}
                     className="max-h-12 w-auto object-contain"
                   />
                 </div>
@@ -84,14 +87,13 @@ export default async function HomePage() {
                       BELIEF ENGLISH
                     </span>
                     <span className="text-[10px] uppercase font-bold text-orange-600 tracking-wider">
-                      Member of BELIS GROUP
+                      {centerName}
                     </span>
                   </div>
                 </div>
               )}
             </a>
 
-            {/* Desktop Navigation Links */}
             <div className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600">
               <a href="#ve-belis" className="hover:text-[#1e3a8a] transition-colors py-1">
                 Về BELIS
@@ -106,11 +108,10 @@ export default async function HomePage() {
                 EdTech 4.0
               </a>
               <a href="#lien-he" className="hover:text-[#1e3a8a] transition-colors py-1">
-                Liên hệ
+                Liên hệ & Công khai
               </a>
             </div>
 
-            {/* Action CTA & Admin Link */}
             <div className="flex items-center gap-3">
               <a
                 href={`tel:${brand.phone.replace(/[^0-9]/g, '')}`}
@@ -147,11 +148,10 @@ export default async function HomePage() {
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-50/70 via-white to-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-[#1e3a8a] text-xs font-bold shadow-2xs">
                 <ShieldCheck className="w-4 h-4 text-orange-500" />
-                <span>Trung tâm Ngoại ngữ Niềm Tin • Chuẩn Khảo Thí Cambridge</span>
+                <span>{centerName} ({centerCode}) • {companyName} (MST: {taxCode})</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
@@ -179,7 +179,6 @@ export default async function HomePage() {
                 </a>
               </div>
 
-              {/* Trust Indicators */}
               <div className="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
                   <div className="text-xl sm:text-2xl font-black text-[#1e3a8a]">100%</div>
@@ -196,7 +195,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Card / Visual Showcase */}
             <div className="lg:col-span-5">
               <div className="relative mx-auto max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100">
                 <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-5 font-bold shadow-xs">
@@ -206,7 +204,7 @@ export default async function HomePage() {
                   Cam Kết Chất Lượng Đào Tạo
                 </h3>
                 <p className="text-xs text-slate-500 mb-6">
-                  Đánh giá năng lực 4 kỹ năng miễn phí và xây dựng lộ trình chuyên biệt cho từng học viên.
+                  Đánh giá năng lực 4 kỹ năng miễn phí và xây dựng lộ trình chuyên biệt cho từng học viên tại {centerName}.
                 </p>
 
                 <div className="space-y-3.5 mb-6 text-xs text-slate-700">
@@ -220,7 +218,7 @@ export default async function HomePage() {
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50/70 border border-emerald-100">
                     <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold">Báo cáo học tập và số hóa tiến độ qua EdTech</span>
+                    <span className="font-semibold">Công khai minh bạch theo Nghị định 81/2021/NĐ-CP</span>
                   </div>
                 </div>
 
@@ -252,7 +250,6 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card B: BELIEVE */}
             <div className="rounded-3xl p-8 bg-blue-50/60 border border-blue-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-2xl shadow-md mb-6">
@@ -270,7 +267,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Card A: ACTIVE */}
             <div className="rounded-3xl p-8 bg-orange-50/60 border border-orange-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-2xl shadow-md mb-6">
@@ -288,7 +284,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Card C: CONTROL */}
             <div className="rounded-3xl p-8 bg-emerald-50/60 border border-emerald-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-2xl shadow-md mb-6">
@@ -320,7 +315,7 @@ export default async function HomePage() {
               Các Chương Trình Đào Tạo Trọng Điểm
             </h2>
             <p className="text-sm text-slate-600">
-              Thiết kế bài bản từ lứa tuổi mầm non đến người lớn, cam kết đầu ra chuẩn Cambridge và CEFR.
+              Thiết kế bài bản từ thiếu nhi đến người lớn, công khai mức học phí theo Nghị định 81/2021/NĐ-CP.
             </p>
           </div>
 
@@ -400,7 +395,7 @@ export default async function HomePage() {
                 </h2>
 
                 <p className="text-sm sm:text-base text-blue-100 max-w-xl leading-relaxed">
-                  Tại Belief English, học viên được tiếp cận phương pháp trực quan sinh động với thiết bị trình chiếu thông minh IPEVO, thi đua kiến thức sôi nổi trên Kahoot/Quizizz và trợ giảng số AI luyện phát âm phản xạ.
+                  Tại {centerName}, học viên được tiếp cận phương pháp trực quan sinh động với thiết bị trình chiếu thông minh IPEVO, thi đua kiến thức sôi nổi trên Kahoot/Quizizz và trợ giảng số AI luyện phát âm phản xạ.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
@@ -444,23 +439,24 @@ export default async function HomePage() {
       <footer id="lien-he" className="bg-[#0f172a] text-slate-300 pt-16 pb-12 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
-            {/* Col 1: About */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center font-bold">
                   B
                 </div>
-                <span className="text-base font-black text-white">{brand.name}</span>
+                <span className="text-base font-black text-white">{centerName}</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
-                Hệ thống đào tạo tiếng Anh chuẩn quốc tế trực thuộc BELIS GROUP. Tiên phong tri thức, hậu vận thành công với phương pháp độc quyền BAC.
+                TÊN CÔNG TY: <strong className="text-white">{companyName}</strong>
               </p>
-              <div className="text-xs text-orange-400 font-semibold">
-                Member of BELIS GROUP Educational Ecosystem
+              <div className="text-xs text-orange-400 font-bold">
+                MÃ SỐ THUẾ: {taxCode} • Mã TT: {centerCode}
+              </div>
+              <div className="text-[11px] text-slate-400">
+                QĐ thành lập: Số 2046/QĐ-SGDĐT ngày 10/11/2025 (Sở GD&ĐT TP.HCM)
               </div>
             </div>
 
-            {/* Col 2: Contact Info */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Thông Tin Liên Hệ</h4>
               <div className="flex items-start gap-2.5 text-xs text-slate-400">
@@ -475,13 +471,12 @@ export default async function HomePage() {
               </div>
               <div className="flex items-center gap-2.5 text-xs text-slate-400">
                 <Mail className="w-4 h-4 text-orange-400 shrink-0" />
-                <a href={`mailto:${brand.email}`} className="hover:text-white transition-colors">
-                  {brand.email}
+                <a href="mailto:beliefenglish.edu@gmail.com" className="hover:text-white transition-colors">
+                  beliefenglish.edu@gmail.com
                 </a>
               </div>
             </div>
 
-            {/* Col 3: Programs */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Chương Trình Học</h4>
               <ul className="space-y-2 text-xs text-slate-400">
@@ -493,11 +488,10 @@ export default async function HomePage() {
               </ul>
             </div>
 
-            {/* Col 4: Management & Social */}
             <div className="space-y-3">
               <h4 className="text-sm font-bold text-white uppercase tracking-wider">Quản Trị Hệ Thống</h4>
               <p className="text-xs text-slate-400">
-                Dữ liệu được lưu trữ tự động trên đám mây Vercel Storage (BLOB_STORE_ID).
+                Công khai thông tin theo Nghị định số 81/2021/NĐ-CP và Thông tư 09/2024/TT-BGDĐT.
               </p>
               <a
                 href="/admin"
@@ -510,8 +504,8 @@ export default async function HomePage() {
           </div>
 
           <div className="pt-8 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>© {new Date().getFullYear()} Belief English (BELIS GROUP). All rights reserved.</p>
-            <p>Hệ thống giáo dục chuẩn quốc tế Cambridge.</p>
+            <p>© {new Date().getFullYear()} {companyName} (MST: {taxCode}) • Trung tâm {centerName}.</p>
+            <p>Công khai thông tin theo Nghị định 81/2021/NĐ-CP.</p>
           </div>
         </div>
       </footer>
